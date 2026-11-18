@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="hi"><head><!--tp-lock--><script>(function(){var f=location.pathname.split("/").pop()||"";fetch("tests.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){var t=(j.tests||[]).filter(function(x){return x.file===f})[0];if(t&&t.locked){document.documentElement.innerHTML='<body style="margin:0;display:grid;place-items:center;min-height:100vh;background:#0f1b4d;color:#fff;font-family:sans-serif;text-align:center"><div><div style="font-size:3rem">🔒</div><h2>यह टेस्ट अभी बंद है</h2><p>कृपया शिक्षक के निर्देश की प्रतीक्षा करें।</p></div></body>'}}).catch(function(){})})();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>SENT-UP Exam 2025</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap"><style>*{box-sizing:border-box}html,body{margin:0;height:100%;background:#06132e}body{-webkit-text-size-adjust:100%}
+/* ===== MCQ Test engine (shared: app + downloaded test) ===== */
+.mq{--m9:#06132e;--m8:#0a1f4d;--m7:#10306f;--m6:#1a4399;--maz:#3d7bff;--mazl:#e7efff;--mink:#0a1f4d;--mmut:#5a6b94;--mln:#d5dff2;--mok:#128a43;--mokb:#e0f6e9;--mbad:#d23a3a;--mbadb:#fde8e8;--mwn:#f5a524;--mqf:1;font-family:'Hind','Noto Sans Devanagari','Segoe UI',Roboto,'Nirmala UI',Mangal,sans-serif;font-size:16px;line-height:1.45;color:var(--mink);-webkit-tap-highlight-color:transparent}
+.mq *{box-sizing:border-box}
+.mq[hidden]{display:none!important}
+.mq-root{position:fixed;inset:0;z-index:120;overflow:auto;background:linear-gradient(160deg,var(--m9),var(--m7));color:#fff}
+.mq-root.mq-sa{position:relative;inset:auto;height:100vh;height:100dvh}
+.mq label{display:flex;font-size:inherit;color:inherit;margin:0}
+.mq h1,.mq h2,.mq h3,.mq p{margin:0}
+
+/* buttons (prefixed .mq so they beat the host page's generic button rules) */
+.mq .mq-btn{appearance:none;display:inline-flex;align-items:center;justify-content:center;gap:.4rem;min-height:48px;padding:.7rem .9rem;border:1.5px solid rgba(255,255,255,.3);border-radius:12px;background:rgba(255,255,255,.08);color:#fff;font-family:inherit;font-size:1rem;font-weight:600;line-height:1.1;cursor:pointer;transition:background .15s,transform .06s,opacity .15s}
+.mq .mq-btn:hover:not(:disabled){background:rgba(255,255,255,.18)}
+.mq .mq-btn:active:not(:disabled){transform:scale(.97)}
+.mq .mq-btn:disabled{opacity:.35;cursor:not-allowed}
+.mq .mq-btn.mq-pri{background:var(--maz);border-color:var(--maz);color:#fff}
+.mq .mq-btn.mq-pri:hover:not(:disabled){background:#2f6cf0}
+.mq .mq-btn.mq-wh{background:var(--mwb,#fff);border-color:var(--mwb,#fff);color:var(--mwt,var(--mh,var(--m8)))}
+.mq .mq-btn.mq-wh:hover:not(:disabled){background:var(--mazl)}
+.mq .mq-btn.mq-ol{background:var(--mcard,#fff);border-color:var(--mln);color:var(--mh,var(--m8))}
+.mq .mq-btn.mq-ol:hover:not(:disabled){background:var(--mazl)}
+.mq .mq-btn.mq-xl{min-height:56px;padding:.9rem 1.6rem;font-size:1.15rem;font-weight:700}
+.mq .mq-ib{appearance:none;display:inline-grid;place-items:center;width:42px;height:42px;padding:0;border:1.5px solid rgba(255,255,255,.28);border-radius:10px;background:rgba(255,255,255,.08);color:#fff;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer}
+.mq .mq-ib:hover{background:rgba(255,255,255,.2)}
+.mq .mq-ib.mq-vs{font-size:.72rem;letter-spacing:-.3px;width:auto;min-width:42px;padding:0 .35rem}
+.mq .mq-btn:focus-visible,.mq .mq-ib:focus-visible,.mq .mq-op:focus-visible{outline:3px solid #9bbcff;outline-offset:2px}
+
+/* switch */
+.mq .mq-sw{align-items:center;gap:.7rem;cursor:pointer;font-weight:600;position:relative}
+.mq .mq-sw input{position:absolute;opacity:0;width:1px;height:1px;padding:0;margin:0;border:0}
+.mq .mq-sw i{flex:none;width:46px;height:27px;border-radius:99px;background:#b9c6e4;position:relative;transition:background .15s}
+.mq .mq-sw i::after{content:"";position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .15s}
+.mq .mq-sw input:checked+i{background:var(--maz)}
+.mq .mq-sw input:checked+i::after{transform:translateX(19px)}
+.mq .mq-sw input:focus-visible+i{outline:3px solid #9bbcff;outline-offset:2px}
+.mq .mq-sw small{display:block;font-weight:400;font-size:.78rem;opacity:.75}
+
+/* ---- start / check / key pages ---- */
+.mq .mq-pg{min-height:100%;display:flex;align-items:center;justify-content:center;padding:1.2rem}
+.mq .mq-pc{width:100%;max-width:580px;background:var(--mcard,#fff);color:var(--mink);border-radius:24px;padding:clamp(1.3rem,4vw,2.2rem);text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.mq .mq-sch{font-weight:600;color:var(--mmut);margin-bottom:.4rem}
+.mq .mq-h1{font-size:clamp(1.6rem,6vw,2.3rem);font-weight:700;line-height:1.25;color:var(--mh,var(--m8))}
+.mq .mq-chips{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin:1rem 0}
+.mq .mq-chips span{background:var(--mazl);color:var(--mac,var(--m7));border-radius:99px;padding:.35rem .85rem;font-size:.95rem}
+.mq .mq-chips b{font-weight:700}
+.mq .mq-ins{text-align:left;margin:.2rem 0 1rem;padding:0 0 0 1.2rem;color:#2b3b66;font-size:.95rem}
+.mq .mq-ins li{margin:.3rem 0}
+.mq .mq-sch::after{content:"";display:block;width:56px;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--maz),#7fb4ff);margin:.55rem auto 0}
+.mq .mq-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(5.6rem,1fr));gap:.5rem;margin:.9rem 0 .2rem}
+.mq .mq-meta div{background:var(--mmeta,linear-gradient(160deg,#f5f8ff,#e9f0ff));border:1px solid #d5e1fb;border-radius:14px;padding:.55rem .6rem}
+.mq .mq-meta .mq-mi{font-size:1.15rem}
+.mq .mq-meta small{display:block;color:#6a7aa3;font-size:.72rem;letter-spacing:.08em;margin-top:.1rem}
+.mq .mq-meta b{display:block;color:var(--mh,var(--m8));font-size:.98rem;line-height:1.3;word-break:break-word}
+.mq .mq-tch{margin:.8rem auto 0;display:inline-flex;gap:.4rem;align-items:center;background:#fff7e6;border:1px solid #f3d9a4;color:#7a4b00;border-radius:99px;padding:.3rem .95rem;font-size:.92rem}
+.mq .mq-insc{text-align:left;background:var(--mcard2,#f8faff);border:1px solid #dfe8fb;border-left:4px solid var(--maz);border-radius:14px;padding:.7rem .9rem .45rem;margin:.9rem 0 1rem}
+.mq .mq-insc h4{margin:0 0 .35rem;color:var(--mh,var(--m8));font-size:1rem}
+.mq .mq-ino{list-style:none;counter-reset:i;margin:0;padding:0}
+.mq .mq-ino li{counter-increment:i;position:relative;padding:.1rem 0 .1rem 2rem;margin:.45rem 0;color:#2b3b66;font-size:.95rem;line-height:1.55;white-space:pre-line}
+.mq .mq-ino li::before{content:counter(i);position:absolute;left:0;top:.22rem;width:1.4rem;height:1.4rem;border-radius:50%;background:var(--maz);color:#fff;font-size:.78rem;font-weight:700;display:grid;place-items:center}
+/* top info strip while testing */
+.mq .mq-inf{display:flex;flex-wrap:wrap;gap:.3rem .45rem;align-items:center;justify-content:center;margin:0 0 .7rem;padding:.5rem .7rem;border-radius:14px;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.14);color:#eaf0ff;font-size:.82rem;line-height:1.25}
+.mq .mq-i-sc{flex:1 0 100%;text-align:center;font-weight:700;font-size:.9rem;letter-spacing:.01em}
+.mq .mq-i-ti{display:none}
+.mq .mq-i-m{background:rgba(255,255,255,.15);border-radius:99px;padding:.14rem .65rem}
+.mq .mq-i-m small{opacity:.75;font-size:.85em;margin-right:.3em}
+/* movable teacher button */
+.mq .mq-tt{position:fixed;z-index:8;transform:translate(-50%,-50%);display:flex;align-items:center;gap:.4rem;max-width:min(70vw,360px);padding:.28rem .85rem .28rem .3rem;border-radius:99px;
+ background:linear-gradient(135deg,rgba(40,86,184,.85),rgba(10,31,77,.85));border:1.5px solid rgba(255,255,255,.75);color:#fff;font-size:.8rem;font-weight:600;
+ box-shadow:0 3px 12px rgba(0,0,0,.45);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.mq .mq-tt .mq-tti{flex:none;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center;font-size:.95rem}
+.mq .mq-tt .mq-ttn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.mq .mq-tt small{opacity:.75;font-weight:500;margin-right:.35em}
+.mq .mq-tt.min{padding:.28rem}.mq .mq-tt.min .mq-ttn{display:none}
+.mq .mq-tgs{display:grid;gap:.7rem;text-align:left;margin:0 0 1.2rem;padding:.9rem 1rem;border:1.5px solid var(--mln);border-radius:14px}
+.mq .mq-cr{margin-top:1rem;font-size:.82rem;color:var(--mmut)}
+.mq .mq-eb{font-weight:700;font-size:clamp(1.55rem,6.4vw,2.3rem);color:var(--mh,var(--m8));line-height:1.2}
+.mq .mq-sub{margin:.9rem 0 .4rem;color:#2b3b66}
+.mq .mq-cd{font-size:clamp(3.4rem,17vw,5.2rem);font-weight:700;color:var(--maz);font-variant-numeric:tabular-nums;line-height:1.1;margin:.6rem 0 .5rem}
+.mq .mq-cdb{height:8px;background:var(--mazl);border-radius:99px;overflow:hidden}
+.mq .mq-cdb i{display:block;height:100%;background:var(--maz);transition:width .25s linear}
+.mq .mq-acts{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center;margin-top:1.5rem}
+.mq .mq-acts .mq-btn{flex:1 1 170px}
+.mq .mq-kp .mq-acts .mq-btn{flex:0 1 420px}
+.mq .mq-sco{margin:1.1rem 0 .3rem}
+.mq .mq-big b{font-size:clamp(3.2rem,15vw,4.8rem);font-weight:700;color:var(--mh,var(--m8));line-height:1}
+.mq .mq-big span{font-size:1.5rem;color:var(--mmut);margin-left:.4rem}
+.mq .mq-pct{display:inline-block;margin-top:.5rem;background:var(--m8);color:#fff;border-radius:99px;padding:.2rem 1rem;font-weight:700}
+.mq .mq-sg{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;margin-top:1.2rem}
+.mq .mq-sg div{border-radius:14px;padding:.8rem .5rem;font-size:.95rem}
+.mq .mq-sg b{display:block;font-size:1.7rem;line-height:1.2}
+.mq .mq-sg .ok{background:var(--mokb);color:var(--mok)}
+.mq .mq-sg .bd{background:var(--mbadb);color:var(--mbad)}
+.mq .mq-sg .sk{background:var(--mskb,#eef1f7);color:var(--mskt,#4d5b7e)}
+.mq .mq-sg .tm{background:var(--mazl);color:var(--m6)}
+
+/* ---- answer key ---- */
+.mq .mq-kp{max-width:1100px;margin:0 auto;padding:1rem clamp(.5rem,2vw,1.2rem) 2rem}
+.mq .mq-kt0{display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem;padding-top:env(safe-area-inset-top)}
+.mq .mq-ktt{font-weight:700;font-size:1.15rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mq .mq-kw{background:var(--mcard,#fff);border-radius:14px;overflow:hidden;box-shadow:0 18px 44px rgba(0,0,0,.3);margin-bottom:1rem}
+.mq .mq-kt{width:100%;table-layout:fixed;border-collapse:collapse;background:var(--mcard,#fff);color:var(--mink);font-size:clamp(9px,2.3vw,16px);font-variant-numeric:tabular-nums}
+.mq .mq-kt td{border:1px solid #aebbdc;text-align:center;padding:clamp(7px,1.3vw,10px) 0;overflow:hidden;line-height:1.2}
+.mq .mq-kt .mq-kh{background:var(--m8);color:#fff;font-weight:700;font-size:1.55em;padding:.45em .3em;border-color:var(--mh,var(--m8))}
+.mq .mq-kt .mq-kq{background:var(--mazl);color:var(--mac,var(--m7));font-weight:600;border-left:2px solid var(--m8)}
+.mq .mq-kt .mq-ka{font-weight:700;font-size:1.15em;color:var(--mok);background:var(--mcard,#fff)}
+.mq .mq-kt .mq-ka:last-child{border-right:2px solid var(--m8)}
+.mq .mq-kt tr:last-child td{border-bottom:2px solid var(--m8)}
+
+/* ---- test + solution screen ---- */
+.mq .mq-t{height:100%;display:flex;flex-direction:column;position:relative;color:#fff}
+.mq .mq-th{display:flex;align-items:center;gap:.6rem;padding:.7rem 1rem;padding-top:calc(.7rem + env(safe-area-inset-top));max-width:900px;width:100%;margin:0 auto}
+.mq .mq-tn{flex:1;min-width:0;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mq .mq-fz{display:flex;gap:.35rem}
+.mq .mq-tmr{font-variant-numeric:tabular-nums;font-weight:700;font-size:1.3rem;min-width:3rem;text-align:center;padding:.3rem .8rem;border-radius:99px;background:var(--mwb,#fff);color:var(--mwt,var(--mh,var(--m8)))}
+.mq .mq-tmr.warn{background:var(--mwn);color:#3a2600}
+.mq .mq-tmr.crit{background:var(--mbad);color:#fff}
+.mq .mq-bar{height:5px;background:rgba(255,255,255,.14)}
+.mq .mq-bar i{display:block;height:100%;width:100%;background:var(--maz);transition:width .2s linear}
+.mq .mq-bar i.warn{background:var(--mwn)}
+.mq .mq-bar i.crit{background:var(--mbad)}
+.mq .mq-tbd{flex:1;min-height:0;overflow:auto;position:relative;width:100%;max-width:900px;margin:0 auto;padding:1rem}
+.mq .mq-qh{display:flex;justify-content:space-between;align-items:center;margin-bottom:.7rem}
+.mq .mq-qno{font-weight:600;font-size:1.05rem;opacity:.95}
+.mq .mq-qno b{font-size:1.3rem}
+.mq .mq-lkb{display:none;background:var(--mbad);color:#fff;border-radius:99px;padding:.15rem .75rem;font-size:.85rem;font-weight:600}
+.mq .mq-lk .mq-lkb{display:inline-block}
+.mq .mq-card{background:var(--mcard,#fff);color:var(--mink);border-radius:20px;padding:clamp(1rem,3vw,1.8rem);box-shadow:0 20px 50px rgba(0,0,0,.28)}
+.mq .mq-qt{font-size:calc(1.3rem*var(--mqf));font-weight:700;line-height:1.5;margin:0 0 1.1rem;overflow-wrap:anywhere;white-space:pre-line}
+.mq .mq-ops{display:grid;gap:.65rem}
+.mq .mq-op{appearance:none;display:flex;align-items:center;gap:.8rem;width:100%;text-align:left;padding:.75rem .9rem;border:2px solid var(--mln);border-radius:14px;background:var(--mcard,#fff);color:var(--mink);font-family:inherit;font-size:calc(1.08rem*var(--mqf));line-height:1.4;cursor:pointer;transition:border-color .12s,background .12s}
+.mq .mq-op:hover{background:var(--mhov,#f4f8ff);border-color:#a9c0f2}
+.mq .mq-lt{flex:none;display:grid;place-items:center;width:calc(2.2rem*var(--mqf));height:calc(2.2rem*var(--mqf));border-radius:50%;border:2px solid var(--mac,var(--m7));color:var(--mac,var(--m7));font-weight:700;font-size:calc(1rem*var(--mqf))}
+.mq .mq-ot{flex:1;min-width:0;overflow-wrap:anywhere;white-space:pre-line}
+.mq .mq-op.on{border-color:var(--maz);background:var(--mazl)}
+.mq .mq-op.on .mq-lt{background:var(--maz);border-color:var(--maz);color:#fff}
+.mq .mq-lk .mq-op{opacity:.55;pointer-events:none}
+.mq .mq-hint{text-align:center;opacity:.7;font-size:.85rem;margin-top:.9rem}
+.mq .mq-pov{display:none;position:absolute;inset:0;z-index:3;background:linear-gradient(160deg,var(--m9),var(--m8));align-items:center;justify-content:center;text-align:center;padding:1rem}
+.mq .mq-ps .mq-pov{display:flex}
+.mq .mq-pov h2{font-size:1.8rem;margin:.4rem 0}
+.mq .mq-pov p{opacity:.8;margin-bottom:1.2rem}
+.mq .mq-pi{font-size:3rem}
+.mq .mq-tf{display:grid;grid-template-columns:repeat(4,1fr);gap:.55rem;width:100%;max-width:900px;margin:0 auto;padding:.7rem 1rem;padding-bottom:calc(.7rem + env(safe-area-inset-bottom))}
+.mq .mq-tf.mq-tf3{grid-template-columns:repeat(3,1fr)}
+.mq .mq-tf .mq-btn{padding:.7rem .3rem;font-size:.98rem}
+.mq .mq-tf .mq-nx{background:var(--maz);border-color:var(--maz)}
+.mq .mq-tf .mq-nx:hover:not(:disabled){background:#2f6cf0}
+.mq .mq-tf .mq-sb{background:var(--mwb,#fff);border-color:var(--mwb,#fff);color:var(--mwt,var(--mh,var(--m8)))}
+.mq .mq-tf .mq-sb:hover:not(:disabled){background:var(--mazl)}
+.mq .mq-ps .mq-tf .mq-btn:not([data-act=pz]){opacity:.3;pointer-events:none}
+
+/* confirm popup */
+.mq .mq-md{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:1rem;background:rgba(3,10,28,.72)}
+.mq .mq-mc{width:100%;max-width:430px;background:var(--mcard,#fff);color:var(--mink);border-radius:20px;padding:1.4rem;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.mq .mq-mc h3{font-size:1.35rem;font-weight:700}
+.mq .mq-mc p{margin:.4rem 0 .9rem;color:#2b3b66}
+.mq .mq-mg{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:1rem}
+.mq .mq-mg div{background:var(--mazl);border-radius:12px;padding:.6rem .3rem;text-align:center;font-size:.85rem;color:var(--mac,var(--m7))}
+.mq .mq-mg b{display:block;font-size:1.5rem;line-height:1.2}
+.mq .mq-mg .w{background:#fff4dc;color:#8a5a00}
+.mq .mq-mb{display:flex;gap:.6rem}
+.mq .mq-mb .mq-btn{flex:1}
+
+/* solution */
+.mq .mq-sl .mq-qt{font-size:calc(1.7rem*var(--mqf))}
+.mq .mq-sl .mq-op{font-size:calc(1.3rem*var(--mqf));cursor:default;padding:.9rem 1rem}
+.mq .mq-sl .mq-op:hover{background:var(--mcard,#fff);border-color:var(--mln)}
+.mq .mq-sl .mq-op.ok:hover{background:var(--mokb);border-color:var(--mok)}
+.mq .mq-op.ok{border-color:var(--mok);background:var(--mokb);color:var(--mokt,#0b4d27);font-weight:700}
+.mq .mq-op.ok .mq-lt{background:var(--mok);border-color:var(--mok);color:#fff}
+.mq .mq-op.bad{border-color:var(--mbad);background:var(--mbadb);color:var(--mbadt,#8c1b14)}
+.mq .mq-op.bad .mq-lt{background:var(--mbad);border-color:var(--mbad);color:#fff}
+.mq .mq-op .mq-tk{flex:none;width:1.5em;height:1.5em;margin-left:auto}
+.mq .mq-modes{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin:.2rem 0 1rem}
+.mq .mq-mo{appearance:none;text-align:left;border:2px solid var(--mln);background:var(--mcard,#fff);border-radius:14px;padding:.6rem .75rem;cursor:pointer;font:inherit;color:var(--mink);display:flex;flex-direction:column;gap:.15rem}
+.mq .mq-mo b{font-size:.98rem;color:var(--mh,var(--m8))}.mq .mq-mo small{color:var(--mmut);font-size:.78rem;line-height:1.3}
+.mq .mq-mo.on{border-color:var(--maz);background:var(--mazl);box-shadow:0 0 0 3px rgba(61,123,255,.18)}
+.mq .mq-tk{flex:none;width:calc(1.8rem*var(--mqf));height:calc(1.8rem*var(--mqf))}
+
+@media(max-width:560px){
+ .mq .mq-th{padding-left:.7rem;padding-right:.7rem}
+ .mq .mq-tbd{padding:.8rem .7rem}
+ .mq .mq-tf{padding-left:.7rem;padding-right:.7rem;gap:.4rem}
+ .mq .mq-tf .mq-btn{font-size:.88rem;min-height:46px}
+ .mq .mq-qt{font-size:calc(1.15rem*var(--mqf))}
+ .mq .mq-op{font-size:calc(1rem*var(--mqf));padding:.65rem .7rem}
+ .mq .mq-sl .mq-qt{font-size:calc(1.4rem*var(--mqf))}
+ .mq .mq-sl .mq-op{font-size:calc(1.12rem*var(--mqf))}
+}
+@media(max-height:480px) and (orientation:landscape){
+ .mq .mq-th{padding-top:.35rem;padding-bottom:.35rem}
+ .mq .mq-tbd{padding:.5rem 1rem}
+ .mq .mq-qt{margin-bottom:.6rem}
+ .mq .mq-tf{padding-top:.4rem;padding-bottom:.4rem}
+}
+
+/* ===== submit-ke-baad pages ===== */
+.mq .mq-end{max-width:620px;padding:clamp(1.4rem,4vw,2.4rem)}
+.mq .mq-endi{width:78px;height:78px;margin:0 auto .6rem;border-radius:50%;display:grid;place-items:center;font-size:2.4rem;background:radial-gradient(circle at 30% 25%,#fff,#e1ecff);box-shadow:0 8px 24px rgba(61,123,255,.35),inset 0 0 0 3px #cfe0ff;animation:mqpop .5s cubic-bezier(.3,1.5,.5,1)}
+@keyframes mqpop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.mq .mq-endt{font-size:clamp(1.7rem,6.5vw,2.4rem);font-weight:700;line-height:1.2;color:var(--mh,var(--m8));margin:.2rem 0}
+.mq .mq-endn{display:inline-block;margin:.5rem 0 0;font-size:.85rem;color:var(--mmut)}
+.mq .mq-endb{display:grid;gap:.7rem;margin:1.3rem 0 .6rem}
+.mq .mq-endb .mq-btn{min-height:56px;font-size:1.08rem;font-weight:700;border:0;color:#fff;box-shadow:0 8px 18px rgba(10,31,77,.2)}
+.mq .mq-endb .mq-b1,.mq .mq-endb .mq-b1:hover:not(:disabled){background:linear-gradient(135deg,#4a86ff,#2457d6)}
+.mq .mq-endb .mq-b2,.mq .mq-endb .mq-b2:hover:not(:disabled){background:linear-gradient(135deg,#ffb84d,#ef8a00)}
+.mq .mq-endb .mq-b3,.mq .mq-endb .mq-b3:hover:not(:disabled){background:linear-gradient(135deg,#34d27b,#12a24f)}
+.mq .mq-endb .mq-btn:hover:not(:disabled){filter:brightness(1.07)}
+.mq .mq-endb2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.2rem}
+.mq .mq-endb2 .mq-btn{min-height:50px;font-weight:700}
+.mq .mq-endb2 .mq-ex{color:#b3261e;border-color:#f0c9c9}
+.mq .mq-lnk{appearance:none;background:none;border:0;color:var(--mmut);font:inherit;font-size:.95rem;font-weight:600;text-decoration:underline;cursor:pointer;padding:.5rem}
+.mq .mq-lp{min-height:100%}
+.mq .mq-lw{max-width:860px;margin:0 auto;padding:0 clamp(.6rem,2.5vw,1.2rem) 1.6rem}
+.mq .mq-lh{display:flex;align-items:center;gap:.6rem;position:sticky;top:0;z-index:5;margin:0 -.3rem .8rem;padding:calc(.55rem + env(safe-area-inset-top)) .3rem .6rem;background:linear-gradient(180deg,var(--m9) 72%,rgba(6,19,46,0))}
+.mq .mq-lhn{flex:1;min-width:0;font-weight:700;font-size:1.15rem;letter-spacing:.05em}
+.mq .mq-h3{margin:1.2rem 0 .6rem;font-size:1.05rem;font-weight:700;color:#dbe6ff}
+.mq .mq-sc{background:var(--mcard,#fff);color:var(--mink);border-radius:20px;padding:1.1rem;box-shadow:0 18px 44px rgba(0,0,0,.3)}
+.mq .mq-sct{display:grid;grid-template-columns:auto 1fr;gap:1rem 1.3rem;align-items:center}
+.mq .mq-dn{position:relative;width:min(42vw,176px);aspect-ratio:1}
+.mq .mq-dn svg{width:100%;height:100%;display:block}
+.mq .mq-dnc{position:absolute;inset:0;display:grid;place-content:center;text-align:center;line-height:1.1}
+.mq .mq-dnc b{font-size:clamp(1.6rem,7.5vw,2.3rem);color:var(--mh,var(--m8))}
+.mq .mq-dnc small{color:var(--mmut);font-size:.78rem}
+.mq .mq-sr{text-align:left}
+.mq .mq-sk{font-size:.8rem;letter-spacing:.1em;color:var(--mmut);font-weight:700;text-transform:uppercase}
+.mq .mq-big2 b{font-size:clamp(2.2rem,10vw,3.3rem);font-weight:700;color:var(--mh,var(--m8));line-height:1}
+.mq .mq-big2 span{font-size:1.2rem;color:var(--mmut);margin-left:.3rem}
+.mq .mq-sm{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.55rem}
+.mq .mq-sm span{background:var(--mazl);color:var(--mac,var(--m7));border-radius:99px;padding:.18rem .7rem;font-size:.85rem;font-weight:600}
+.mq .mq-bars{display:grid;gap:.6rem;margin-top:1.1rem}
+.mq .mq-br{display:grid;grid-template-columns:6.6rem 1fr 2.2rem;align-items:center;gap:.6rem;font-size:.92rem;color:var(--mink,#2b3b66)}
+.mq .mq-br .tr{height:13px;border-radius:99px;background:var(--mtr,#e9eefb);overflow:hidden}
+.mq .mq-br .tr i{display:block;height:100%;border-radius:99px}
+.mq .mq-br b{text-align:right;color:var(--mh,var(--m8))}
+.mq .mq-qc{background:var(--mcard,#fff);color:var(--mink);border-radius:16px;padding:.9rem 1rem;margin-bottom:.8rem;box-shadow:0 10px 26px rgba(0,0,0,.22)}
+.mq .mq-qq{margin:0 0 .6rem;font-weight:700;line-height:1.5;font-size:calc(1.08rem*var(--mqf));white-space:pre-line;overflow-wrap:anywhere}
+.mq .mq-qq b{color:var(--maz);margin-right:.35em}
+.mq .mq-lops{display:grid;gap:.4rem}
+@media(min-width:640px){.mq .mq-lops{grid-template-columns:1fr 1fr}}
+.mq .mq-lo{display:flex;align-items:center;gap:.6rem;padding:.45rem .65rem;border:1.5px solid var(--mln);border-radius:11px;background:var(--mcard,#fff);font-size:calc(1rem*var(--mqf));line-height:1.35}
+.mq .mq-ll{flex:none;display:grid;place-items:center;width:1.9em;height:1.9em;border-radius:50%;border:2px solid var(--mac,var(--m7));color:var(--mac,var(--m7));font-weight:700;font-size:.85em}
+.mq .mq-lx{flex:1;min-width:0;overflow-wrap:anywhere;white-space:pre-line}
+.mq .mq-lo .mq-tk{width:1.6em;height:1.6em}
+.mq .mq-lo.ok{border-color:var(--mok);background:var(--mokb);color:var(--mokt,#0b4d27);font-weight:700}
+.mq .mq-lo.ok .mq-ll{background:var(--mok);border-color:var(--mok);color:#fff}
+.mq .mq-lo.bad{border-color:var(--mbad);background:var(--mbadb);color:var(--mbadt,#8c1b14)}
+.mq .mq-lo.bad .mq-ll{background:var(--mbad);border-color:var(--mbad);color:#fff}
+.mq .mq-ya{display:flex;align-items:center;gap:.6rem;margin-top:.55rem;padding:.4rem .75rem;border-radius:10px;font-size:.93rem;font-weight:600;overflow-wrap:anywhere}
+.mq .mq-ya span{flex:1;min-width:0}.mq .mq-ya .mq-tk{width:1.6rem;height:1.6rem;flex:none}
+.mq .mq-ya.ok{background:var(--mokb);color:var(--mok)}
+.mq .mq-ya.bad{background:var(--mbadb);color:var(--mbad)}
+.mq .mq-kt .mq-kh{letter-spacing:.14em}
+.mq .mq-kt td.e{background:var(--mcard2,#f3f5fb)}
+.mq .mq-kp .mq-acts{margin-top:1rem}
+/* ===== MOBILE LANDSCAPE: full-screen test, floating controls ===== */
+.mq .mq-fab,.mq .mq-tc,.mq .mq-fsh,.mq .mq-qn{display:none}
+@media (orientation:landscape) and (max-height:520px) and (pointer:coarse){
+ .mq{--ms:calc(var(--mqf) * var(--mqa,1))}
+ .mq-root{overscroll-behavior:none}
+ .mq .mq-t:not(.mq-sl) .mq-th,.mq .mq-t:not(.mq-sl) .mq-tf,.mq .mq-t:not(.mq-sl) .mq-hint{display:none}
+ /* LED line (time) */
+ .mq .mq-t:not(.mq-sl) .mq-bar{position:fixed;top:0;left:0;right:0;height:6px;z-index:7;background:rgba(255,255,255,.12);box-shadow:0 1px 6px rgba(0,0,0,.35)}
+ .mq .mq-t:not(.mq-sl) .mq-bar i{position:relative;background:linear-gradient(90deg,#2f6cf0,#7fb4ff);box-shadow:0 0 10px 2px rgba(80,140,255,.85)}
+ .mq .mq-t:not(.mq-sl) .mq-bar i::after{content:"";position:absolute;right:0;top:-2px;bottom:-2px;width:12px;border-radius:99px;background:#fff;filter:blur(2px);opacity:.9}
+ .mq .mq-t:not(.mq-sl) .mq-bar i.warn{background:linear-gradient(90deg,#e08a00,#ffc65c);box-shadow:0 0 10px 2px rgba(255,170,40,.85)}
+ .mq .mq-t:not(.mq-sl) .mq-bar i.crit{background:linear-gradient(90deg,#c62828,#ff7a7a);box-shadow:0 0 10px 2px rgba(255,70,70,.9)}
+ /* page */
+ .mq .mq-t:not(.mq-sl) .mq-tbd{max-width:none;margin:0;display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto;
+  padding:10px max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left))}
+ .mq .mq-t:not(.mq-sl) .mq-qh{position:absolute;bottom:14px;left:22px;margin:0;z-index:2}
+ .mq .mq-t:not(.mq-sl) .mq-qn{display:inline;color:var(--maz);font-weight:800;margin-right:.3em}
+ .mq .mq-t:not(.mq-sl) .mq-qs{font-size:.5em;font-weight:700;opacity:.55;margin-left:.08em;vertical-align:baseline}
+ .mq .mq-t:not(.mq-sl) .mq-qno{display:none}
+ .mq .mq-t:not(.mq-sl) .mq-lkb{font-size:.75rem;padding:.05rem .6rem}
+ .mq .mq-t:not(.mq-sl) .mq-inf{flex-wrap:nowrap;white-space:nowrap;overflow:hidden;justify-content:center;gap:0;margin:0 0 6px;padding:3px 12px;border-radius:9px;font-size:.78rem}
+ .mq .mq-t:not(.mq-sl) .mq-i{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+ .mq .mq-t:not(.mq-sl) .mq-i-sc{flex:0 1 auto;font-size:.8rem}
+ .mq .mq-t:not(.mq-sl) .mq-i-ti{display:inline}
+ .mq .mq-t:not(.mq-sl) .mq-i+.mq-i::before{content:"•";margin:0 .6em;opacity:.45}
+ .mq .mq-t:not(.mq-sl) .mq-i-m{background:none;padding:0;border-radius:0}
+ .mq .mq-t:not(.mq-sl) .mq-card{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;padding:10px 14px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+ .mq .mq-t:not(.mq-sl) .mq-qt{font-size:calc(1.32rem*var(--ms));line-height:1.35;margin:0 0 .6rem}
+ .mq .mq-t:not(.mq-sl) .mq-ops{grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:8px}
+ .mq .mq-t:not(.mq-sl) .mq-op{padding:calc(.4rem*var(--mqa,1)) calc(.6rem*var(--mqa,1));gap:.55rem;border-radius:10px;font-size:calc(1.08rem*var(--ms));line-height:1.3}
+ .mq .mq-t:not(.mq-sl) .mq-lt{width:calc(1.9rem*var(--ms));height:calc(1.9rem*var(--ms));font-size:calc(.95rem*var(--ms));border-width:1.8px}
+ /* floating time circle */
+ .mq .mq-tc{display:grid;place-items:center;position:fixed;z-index:8;width:48px;height:48px;border-radius:50%;transform:translate(-50%,-50%);
+  background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.28),rgba(255,255,255,0) 60%),rgba(10,31,77,.72);
+  border:2px solid rgba(255,255,255,.85);color:#fff;font-weight:800;font-size:1.3rem;font-variant-numeric:tabular-nums;
+  box-shadow:0 3px 12px rgba(0,0,0,.45),0 0 10px rgba(80,140,255,.55);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+ .mq .mq-tc.warn{background:var(--mwn);color:#3a2600;border-color:#fff;box-shadow:0 3px 12px rgba(0,0,0,.45),0 0 12px rgba(255,170,40,.8)}
+ .mq .mq-tc.crit{background:var(--mbad);color:#fff;border-color:#fff;box-shadow:0 3px 12px rgba(0,0,0,.45),0 0 12px rgba(255,70,70,.9)}
+ /* floating control circle + radial menu */
+ .mq .mq-fab{display:block;position:fixed;z-index:9;width:0;height:0}
+ .mq .mq-fb{appearance:none;position:absolute;left:-23px;top:-23px;width:46px;height:46px;padding:0;border-radius:50%;display:grid;place-items:center;
+  background:rgba(10,31,77,.6);border:2px solid rgba(255,255,255,.85);color:#fff;opacity:.78;
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);box-shadow:0 2px 10px rgba(0,0,0,.45),0 0 0 1px rgba(10,31,77,.35);
+  touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;transition:opacity .2s,background .2s,box-shadow .2s}
+ .mq .mq-fb svg{width:24px;height:24px;transition:transform .3s}
+ .mq .mq-fab.on .mq-fb{opacity:1;background:rgba(61,123,255,.55);box-shadow:0 0 0 4px rgba(255,255,255,.12),0 0 16px rgba(80,140,255,.8)}
+ .mq .mq-fab.on .mq-fb svg{transform:rotate(45deg)}
+ .mq .mq-fm{position:absolute;left:0;top:0;width:0;height:0}
+ .mq .mq-fi{appearance:none;position:absolute;left:-21px;top:-21px;width:42px;height:42px;padding:0;border-radius:50%;display:grid;place-items:center;color:#fff;
+  background:radial-gradient(circle at 30% 22%,rgba(255,255,255,.55),rgba(255,255,255,0) 55%),linear-gradient(145deg,var(--c1),var(--c2));
+  border:1.5px solid rgba(255,255,255,.7);box-shadow:0 4px 12px rgba(0,0,0,.5),0 0 12px var(--c1);
+  opacity:0;transform:translate(0,0) scale(.2);pointer-events:none;transition:transform .22s cubic-bezier(.3,1.4,.5,1),opacity .15s;cursor:pointer}
+ .mq .mq-fi svg{width:23px;height:23px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+ .mq .mq-fab.on .mq-fi{opacity:1;transform:translate(var(--dx,0px),var(--dy,0px)) scale(1);pointer-events:auto}
+ .mq .mq-fab.on .mq-fi:nth-child(2){transition-delay:.03s}.mq .mq-fab.on .mq-fi:nth-child(3){transition-delay:.06s}
+ .mq .mq-fab.on .mq-fi:nth-child(4){transition-delay:.09s}.mq .mq-fab.on .mq-fi:nth-child(5){transition-delay:.12s}.mq .mq-fab.on .mq-fi:nth-child(6){transition-delay:.15s}.mq .mq-fab.on .mq-fi:nth-child(7){transition-delay:.18s}.mq .mq-fab.on .mq-fi:nth-child(8){transition-delay:.21s}.mq .mq-fi .mq-sp{font-weight:800;font-size:.72rem;letter-spacing:-.2px;text-shadow:0 1px 1px rgba(0,0,0,.4)}
+ .mq .mq-fab.on .mq-fi:disabled{opacity:.3;filter:grayscale(.6)}
+ .mq .mq-fi:active:not(:disabled){transform:translate(var(--dx,0px),var(--dy,0px)) scale(.9)}
+ .mq .mq-ps .mq-fi:not([data-act=pz]):not([data-act=fm]):not([data-act=fp]):not([data-act=vo]):not([data-act=vs]){opacity:.3;pointer-events:none}
+ /* start page: everything on one screen */
+ .mq .mq-pg.mq-st{height:100%;min-height:0;padding:max(8px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) 8px max(10px,env(safe-area-inset-left));overflow:hidden}
+ .mq .mq-st .mq-pc{max-width:none;height:100%;padding:12px 18px 10px;border-radius:18px;font-size:calc(1rem*var(--sa,1));display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);grid-template-rows:minmax(0,1fr) auto;gap:6px 18px;overflow:hidden}
+ .mq .mq-st .mq-stl{grid-column:1;grid-row:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+ .mq .mq-st .mq-str{grid-column:2;grid-row:1;min-height:0;overflow:auto;display:flex;flex-direction:column;justify-content:center}
+ .mq .mq-st .mq-stb{grid-column:1/-1;grid-row:2;display:flex;align-items:center;justify-content:center;gap:14px}
+ .mq .mq-st .mq-sch{font-size:.95em;margin:0}
+ .mq .mq-st .mq-sch::after{margin:.35em auto 0}
+ .mq .mq-st .mq-h1{font-size:2em;line-height:1.15;margin:.15em 0 .2em}
+ .mq .mq-st .mq-meta{margin:.4em 0 .1em;gap:.4em;grid-template-columns:repeat(auto-fit,minmax(5em,1fr))}
+ .mq .mq-st .mq-meta div{padding:.3em .4em;border-radius:.8em}
+ .mq .mq-st .mq-meta .mq-mi{font-size:1em}.mq .mq-st .mq-meta small{font-size:.7em;margin:0}.mq .mq-st .mq-meta b{font-size:.92em}
+ .mq .mq-st .mq-tch{margin:.4em auto 0;font-size:.82em;padding:.15em .8em}
+ .mq .mq-st .mq-chips{margin:.5em 0 0;gap:.35em}.mq .mq-st .mq-chips span{font-size:.82em;padding:.2em .7em}
+ .mq .mq-st .mq-insc{margin:0;padding:.5em .8em .3em;border-radius:.9em}
+ .mq .mq-st .mq-insc h4{font-size:.95em;margin:0 0 .2em}
+ .mq .mq-st .mq-ino li{font-size:.85em;line-height:1.4;margin:.28em 0;padding-left:2em}
+ .mq .mq-st .mq-ino li::before{width:1.5em;height:1.5em;font-size:.7em;top:.1em}
+ .mq .mq-st .mq-tgs{display:flex;gap:12px;margin:0;padding:.3em .8em;border-radius:.8em}
+ .mq .mq-st .mq-tgs .mq-sw{margin:0;font-size:.8em;gap:.5em}
+ .mq .mq-st .mq-tgs .mq-sw i{width:36px;height:21px}.mq .mq-st .mq-tgs .mq-sw i::after{width:15px;height:15px;top:3px}.mq .mq-st .mq-tgs .mq-sw input:checked+i::after{transform:translateX(15px)}
+ .mq .mq-st .mq-btn.mq-xl{min-height:0;padding:.55em 1.6em;font-size:1em;flex:0 1 320px}
+ .mq .mq-st .mq-cr{margin:0;font-size:.7em}
+ .mq .mq-st .mq-modes{margin:.45em 0 0;gap:.4em}.mq .mq-st .mq-mo{padding:.3em .6em;border-radius:.8em;border-width:1.5px}.mq .mq-st .mq-mo b{font-size:.88em}.mq .mq-st .mq-mo small{font-size:.68em}
+ /* end page compact */
+ .mq .mq-eg{padding:8px max(10px,env(safe-area-inset-right)) 8px max(10px,env(safe-area-inset-left))}
+ .mq .mq-eg .mq-end{max-width:none;padding:12px 18px 8px;border-radius:18px}
+ .mq .mq-eg .mq-endi{width:52px;height:52px;font-size:1.7rem;margin-bottom:.2rem}
+ .mq .mq-eg .mq-endt{font-size:1.6rem}
+ .mq .mq-eg .mq-sub{margin:.3rem 0 0;font-size:.9rem}
+ .mq .mq-eg .mq-endb{grid-template-columns:repeat(3,1fr);margin:.7rem 0 .2rem}
+ .mq .mq-eg .mq-endb .mq-btn{min-height:46px;font-size:.95rem;padding:.4rem .4rem}
+ .mq .mq-eg .mq-endb2{margin-top:0}.mq .mq-eg .mq-endb2 .mq-btn{min-height:40px;font-size:.9rem;padding:.3rem}
+ .mq .mq-eg .mq-endn{display:none}
+ .mq .mq-eg .mq-endb{margin:.5rem 0 .5rem}
+ .mq .mq-fsh{display:block;position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:11;max-width:80vw;text-align:center;pointer-events:none;
+  background:rgba(0,0,0,.65);color:#fff;border-radius:99px;padding:.3rem .9rem;font-size:.8rem}
+}
+@media(prefers-reduced-motion:reduce){.mq *{transition:none!important}}
+
+/* ===== THEMES + LAYOUTS ===== */
+.mq[data-th=night]{--m9:#070b16;--m8:#27407a;--m7:#141d38;--m6:#5b8cff;--maz:#5b8cff;--mazl:#1f2d4d;--mink:#e8edf8;--mh:#e8edf8;--mac:#8fb0ff;--mmut:#9aa8c4;--mln:#2b3858;--mcard:#172036;--mcard2:#1c2742;--mhov:#1f2d4d;--mmeta:#1c2742;--mokb:#12402a;--mbadb:#4a1d22;--mok:#4cd68a;--mbad:#ff7a7a;--mwb:#e8edf8;--mwt:#0a1f4d;--mokt:#a6f3c8;--mbadt:#ffc2c2;--mtr:#26335a;--mskb:#263250;--mskt:#b3bfdb}
+.mq[data-th=forest]{--m9:#052e22;--m8:#0b4a35;--m7:#0f6b4a;--m6:#12865f;--maz:#17a673;--mazl:#ddf5ea;--mink:#0a2e20;--mh:#0b4a35;--mac:#0f6b4a;--mln:#cfe8dc;--mhov:#eaf8f1}
+.mq[data-th=sunset]{--m9:#3b0f4e;--m8:#4a1259;--m7:#c2410c;--m6:#9a3412;--maz:#e0561b;--mazl:#fde9dc;--mink:#3a1146;--mh:#4a1259;--mac:#9a3412;--mln:#f1d5c4;--mhov:#fff3ec}
+.mq[data-th=coffee]{--m9:#24150a;--m8:#4a2c12;--m7:#6b4423;--m6:#8a5a2b;--maz:#c2761f;--mazl:#f6e7cf;--mink:#2b1a0a;--mh:#4a2c12;--mac:#7a4a1b;--mln:#e6d3b3;--mcard:#fffaf0;--mcard2:#fbf1df;--mhov:#fbeed8;--mmeta:#fbf1df}
+.mq-root[data-th=night],.thp[data-th=night]{background:radial-gradient(circle at 15% 8%,rgba(91,140,255,.22),transparent 45%),radial-gradient(circle at 85% 90%,rgba(143,176,255,.12),transparent 40%),linear-gradient(160deg,var(--m9),var(--m7))}
+.mq-root[data-th=forest],.thp[data-th=forest]{background:radial-gradient(circle at 80% 5%,rgba(120,230,170,.2),transparent 45%),linear-gradient(170deg,var(--m9),var(--m7))}
+.mq-root[data-th=sunset],.thp[data-th=sunset]{background:radial-gradient(circle at 50% 0,rgba(255,190,90,.35),transparent 50%),linear-gradient(180deg,var(--m9),var(--m7))}
+.mq-root[data-th=coffee],.thp[data-th=coffee]{background:radial-gradient(circle at 10% 90%,rgba(255,200,130,.18),transparent 45%),linear-gradient(160deg,var(--m9),var(--m7))}
+.mq[data-lo=grid] .mq-ops{grid-template-columns:1fr 1fr}
+.mq[data-lo=grid] .mq-op{padding:.6rem .55rem;gap:.5rem}
+
+.mq .mq-card{position:relative}
+.mq .mq-fx{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);z-index:6;display:flex;align-items:center;gap:.45rem;padding:.35rem .9rem;border-radius:99px;font-size:.95rem;white-space:nowrap;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.22);animation:mqfx 1.4s ease both}
+.mq .mq-fx span{font-size:1.6rem;line-height:1;display:inline-block;animation:mqpop .5s ease both}
+.mq .mq-fx.g{background:#e8f9ee;color:#0f6b34;border:1.5px solid #5fd18a}
+.mq .mq-fx.w{background:#fff6e0;color:#8a5a00;border:1.5px solid #f2c566}
+.mq .mq-fx em{position:absolute;left:50%;top:0;font-style:normal;font-size:1rem;opacity:0;animation:mqpt 1.1s ease-out both}
+@keyframes mqfx{0%{opacity:0;transform:translate(-50%,10px) scale(.85)}15%{opacity:1;transform:translate(-50%,0) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-6px) scale(1)}}
+@keyframes mqpop{0%{transform:scale(.3) rotate(-20deg)}60%{transform:scale(1.35) rotate(8deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes mqpt{0%{opacity:1;transform:translate(0,0)}100%{opacity:0;transform:translate(var(--x),-55px)}}
+@media(prefers-reduced-motion:reduce){.mq .mq-fx,.mq .mq-fx span,.mq .mq-fx em{animation:none}}
+.mq .mq-sxb{display:flex;gap:6px;overflow-x:auto;margin:.3rem 0 .4rem;padding-bottom:2px}
+.mq .mq-sxc{flex:none;appearance:none;display:flex;flex-direction:column;align-items:center;min-width:72px;padding:.25rem .7rem;border-radius:10px;border:1.5px solid var(--mln);background:var(--mcard,#fff);color:var(--mh,var(--m8));font:inherit;cursor:pointer;line-height:1.15}
+.mq .mq-sxc b{font-size:.85rem}.mq .mq-sxc small{font-size:.7rem;opacity:.8}
+.mq .mq-sxc.on{background:var(--maz);border-color:var(--maz);color:#fff}
+/* Night theme: text readable */
+.mq[data-th=night] .mq-ins,.mq[data-th=night] .mq-ino li,.mq[data-th=night] .mq-sub,.mq[data-th=night] .mq-mc p{color:var(--mink)}
+.mq[data-th=night] .mq-ino li,.mq[data-th=night] .mq-sub{opacity:.92}
+.mq[data-th=night] .mq-meta small{color:var(--mmut)}
+.mq[data-th=night] .mq-endb2 .mq-ex{color:#ff9b9b;border-color:#7a3b45}
+.mq .mq-tsb{flex:none;appearance:none;min-width:34px;height:34px;padding:0 .5rem;border-radius:10px;border:1.5px solid currentColor;background:transparent;color:inherit;font:700 1rem inherit;opacity:.92;cursor:pointer}
+.mq .mqs-ov{position:fixed;inset:0;z-index:60;background:rgba(5,10,25,.55);display:flex;align-items:flex-end;justify-content:center}
+.mq .mqs-bx{width:min(620px,100%);max-height:90%;overflow:auto;background:var(--mcard,#fff);color:var(--mink,#0f1b4d);border-radius:18px 18px 0 0;padding:.6rem .75rem 1rem;box-shadow:0 -10px 30px rgba(0,0,0,.35)}
+.mq .mqs-hd{display:flex;align-items:center;justify-content:space-between;gap:.5rem;font-size:.98rem}
+.mq .mqs-hd small{font-weight:400;opacity:.7;font-size:.72rem}
+.mq .mqs-x{appearance:none;width:32px;height:32px;border-radius:50%;border:0;background:rgba(127,127,127,.18);color:inherit;font-size:1rem;cursor:pointer}
+.mq .mqs-info{display:flex;flex-wrap:wrap;gap:.2rem .9rem;margin:.35rem 0;font-size:.88rem}
+.mq .mqs-info small{opacity:.7;font-size:.72rem}
+.mq .mqs-st{display:grid;grid-template-columns:repeat(4,1fr);gap:.35rem;margin:.4rem 0}
+.mq .mqs-c{border-radius:10px;padding:.3rem .2rem;text-align:center;line-height:1.15;border:1.5px solid transparent}
+.mq .mqs-c b{display:block;font-size:1.2rem}
+.mq .mqs-c small{font-size:.64rem;display:block}
+.mq .mqs-c.t{background:rgba(127,127,127,.15)}
+.mq .mqs-c.g{background:rgba(31,166,85,.18);border-color:#1fa655}
+.mq .mqs-c.r{background:rgba(229,72,77,.16);border-color:#e5484d}
+.mq .mqs-c.w{background:#fff;color:#0f1b4d;border-color:#c9d4ee}
+.mq .mqs-pr{font-size:.85rem;margin:.1rem 0 .3rem;text-align:center}
+.mq .mqs-t2{font-weight:700;font-size:.9rem;margin:.5rem 0 .3rem}
+.mq .mqs-t2 small{font-weight:400;opacity:.7}
+.mq .mqs-gh{font-size:.8rem;font-weight:700;margin:.4rem 0 .2rem;opacity:.85}
+.mq .mqs-gg{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px}
+.mq .mqs-n{height:40px;padding:0;border-radius:10px;border:1.5px solid #c9d4ee;background:#fff;color:#0f1b4d;font:700 .9rem inherit;cursor:pointer}
+.mq .mqs-n.g{background:#1fa655;border-color:#178a45;color:#fff}
+.mq .mqs-n.r{background:#e5484d;border-color:#c5373c;color:#fff}
+.mq .mqs-n.y{background:#ffd978;border-color:#e6b73d;color:#5a3d00}
+.mq .mqs-n.cur{outline:3px solid var(--maz,#2f6bff);outline-offset:1px}
+.mq .mqs-lg{display:flex;flex-wrap:wrap;gap:.25rem .8rem;margin-top:.6rem;font-size:.74rem;opacity:.9}
+.mq .mqs-lg i{display:inline-block;width:.8rem;height:.8rem;border-radius:3px;vertical-align:-1px;margin-right:.25rem;border:1px solid #c9d4ee}
+</style></head><body><div id="mqRoot" class="mq mq-root mq-sa"></div><script>function MQ(root,cfg){
+let thNow=cfg.th||'blue';const th0=thNow;const NMI=()=>thNow==='night'?'☀️':'🌙';
+const setTh=t=>{thNow=t;root.setAttribute('data-th',t);root.setAttribute('data-lo',cfg.lo==='grid'?'grid':'list');root.querySelectorAll('[data-act=nm]').forEach(x=>{x.textContent=NMI()})};
+const nmT=()=>setTh(thNow==='night'?(th0==='night'?'blue':th0):'night');setTh(thNow);
+const L='ABCDEFGH',N0=cfg.items.length;
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const st=Object.assign({secs:30,shufQ:false,shufO:false,mark:1,neg:0},cfg.st||{});st.secs=Math.min(60,Math.max(5,+st.secs||30));let mode=cfg.mode==='practice'?'practice':'exam';
+let seen=[],run=[],ans=[],left=[],cur=0,paused=false,modal=false,fs=0,scr='',last=0,tid=0,until=0,shown=false,solI=0,res=null;
+const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const fmt=s=>{s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+const q1=s=>root.querySelector(s);
+const sc=s=>String(Math.max(0,Math.ceil(s))).padStart(2,'0');
+const tf=s=>s>=60?Math.floor(s/60)+' मिनट'+(s%60?' '+(s%60)+' सेकंड':''):s+' सेकंड';
+const tok=s=>esc(s).replace(/\{secs\}/g,st.secs).replace(/\{n\}/g,N0).replace(/\{total\}/g,tf(N0*st.secs));
+const infoHTML=()=>{const p=[];if(cfg.school)p.push('<span class="mq-i mq-i-sc">'+esc(cfg.school)+'</span>');if(!cfg.hideTitle)p.push('<span class="mq-i mq-i-ti">'+esc(cfg.title)+'</span>');
+[['कक्षा',cfg.cls],['विषय',cfg.subj],['अध्याय',cfg.chap]].forEach(a=>{if(a[1])p.push('<span class="mq-i mq-i-m"><small>'+a[0]+'</small>'+esc(a[1])+'</span>')});return p.length?'<div class="mq-inf">'+p.join('')+'</div>':''};
+const ttHTML=()=>cfg.tchr?`<div class="mq-tt${ttMin?' min':''}" data-k="tt" data-drag="tt"><span class="mq-tti">👨‍🏫</span><span class="mq-ttn"><small>शिक्षक</small>${esc(cfg.tchr)}</span></div>`:'';
+const stop=()=>{clearInterval(tid);tid=0};
+const setF=()=>root.style.setProperty('--mqf',(1+fs*.1).toFixed(2));
+const TICK='<svg class="mq-tk" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#128a43"/><path d="M6.5 12.5l3.8 3.8 7.2-8" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const FZ={toString(){return '<div class="mq-fz"><button class="mq-ib" data-act="nm" aria-label="Night mode">'+NMI()+'</button><button class="mq-ib" data-act="fm" aria-label="Font छोटा करें">A−</button><button class="mq-ib" data-act="fp" aria-label="Font बड़ा करें">A+</button></div>'}};
+
+
+/* ---- auto voice: read question + options at normal speed ---- */
+const TS=window.speechSynthesis,HL=['ए','बी','सी','डी','ई','एफ','जी','एच'];
+let vo=true,spk=-1,sid=0,vr=1;const VR=[.8,1,1.25,1.5,2];
+let sn='',sr='';root.addEventListener('input',e=>{const f=e.target&&e.target.dataset&&e.target.dataset.f;if(f==='sname')sn=e.target.value;else if(f==='sroll')sr=e.target.value});
+try{const q=localStorage.getItem('mq_vrate');if(q&&VR.map(String).includes(q))vr=+q}catch(e){}
+const vlab=()=>vr+'×';
+try{if(localStorage.getItem('mq_voice')==='0')vo=false}catch(e){}
+let HV=null;function pickV(){try{const l=TS.getVoices()||[];HV=l.find(v=>/^hi/i.test(v.lang))||l.find(v=>/hindi|हिन्दी/i.test(v.name))||null}catch(e){}return HV}
+if(TS){pickV();try{TS.addEventListener('voiceschanged',pickV)}catch(e){}}
+function stopSpeak(){sid++;try{TS&&TS.cancel()}catch(e){}}
+function sayQ(){if(!vo||!TS||paused||modal||left[cur]<=0||spk===cur||ans[cur]>=0)return;
+if(!(TS.getVoices()||[]).length&&!sayQ.r){sayQ.r=1;setTimeout(sayQ,400);return}
+spk=cur;
+const x=run[cur],cl=s=>String(s).replace(/[\u2013\u2014]/g,', ').replace(/ई\.?\s*पू\./g,'ईसा पूर्व').replace(/ई[.०]\s*में/g,'ईस्वी').replace(/(\d)\s*ई[.०]/g,'$1 ईस्वी').replace(/\s+/g,' ').trim();
+const t='प्रश्न '+(cur+1)+'. '+cl(x.q)+' '+x.o.map((o,k)=>(HL[k]||'')+'. '+cl(o)+'.').join(' ');
+stopSpeak();
+try{const u=new SpeechSynthesisUtterance(t);u.lang='hi-IN';u.rate=vr;
+const v=HV||pickV();if(v){u.voice=v;u.lang=v.lang}
+TS.speak(u)}catch(e){}}
+const VB=()=>`<button class="mq-ib" data-act="vo" aria-label="आवाज़ चालू/बंद">${vo?'🔊':'🔇'}</button>`+(vo?`<button class="mq-ib mq-vs" data-act="vs" aria-label="आवाज़ की स्पीड">${vlab()}</button>`:'');
+/* ---- mobile landscape: fullscreen + floating controls ---- */
+const LSQ='(orientation:landscape) and (max-height:520px) and (pointer:coarse)';
+const mm=window.matchMedia?window.matchMedia(LSQ):{matches:false};
+const isLS=()=>!!mm.matches;
+let fabOpen=false,fsDone=false,hinted=false,drag=null,ttMin=false;
+const pos={fab:{x:.955,y:.88},tc:{x:.955,y:.14},tt:null};
+const IC={
+dots:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="7.5" cy="7.5" r="2.6"/><circle cx="16.5" cy="7.5" r="2.6"/><circle cx="7.5" cy="16.5" r="2.6"/><circle cx="16.5" cy="16.5" r="2.6"/></svg>',
+bk:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H6"/><path d="M11.5 6 5.5 12l6 6"/></svg>',
+nx:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"/><path d="M12.5 6l6 6-6 6"/></svg>',
+pz:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4.2" height="14" rx="1.5"/><rect x="13.8" y="5" width="4.2" height="14" rx="1.5"/></svg>',
+pl:'<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>',
+sub:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.8l4.6 4.6L19 7.2"/></svg>',
+vo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.6L12.5 19V5L7.6 9.5z" fill="currentColor"/><path d="M16 9a4.2 4.2 0 0 1 0 6"/><path d="M18.6 6.4a8 8 0 0 1 0 11.2"/></svg>',
+vx:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.6L12.5 19V5L7.6 9.5z" fill="currentColor"/><path d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></svg>',
+fm:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.8 19 8 5.5 13.2 19"/><path d="M4.8 14.4h6.4"/><path d="M16.5 14.5h5"/></svg>',
+fp:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.8 19 7 5.5 12.2 19"/><path d="M3.8 14.4h6.4"/><path d="M16 14.5h6"/><path d="M19 11.5v6"/></svg>'};
+const fsEl=()=>document.fullscreenElement||document.webkitFullscreenElement;
+function tryFS(){if(fsDone)return;if(fsEl()){fsDone=true;return}
+const de=document.documentElement,rq=de.requestFullscreen||de.webkitRequestFullscreen;if(!rq)return;
+try{const p=rq.call(de,{navigationUI:'hide'});if(p&&p.then)p.then(()=>{fsDone=true}).catch(()=>{});else fsDone=true}catch(e){}}
+function exitFS(){if(fsDone&&fsEl()){const x=document.exitFullscreen||document.webkitExitFullscreen;try{const p=x&&x.call(document);if(p&&p.catch)p.catch(()=>{})}catch(e){}}fsDone=false}
+function place(k){const el=q1('[data-k="'+k+'"]');if(!el)return;const W=innerWidth,H=innerHeight,mx=Math.max(26,el.offsetWidth/2+4),my=Math.max(26,el.offsetHeight/2+4),p=pos[k]||(isLS()?{x:.2,y:.93}:{x:.5,y:.8});
+el.style.left=Math.min(W-mx,Math.max(mx,p.x*W))+'px';el.style.top=Math.min(H-my,Math.max(my,p.y*H))+'px'}
+function layoutMenu(){const f=q1('.mq-fab');if(!f)return;const its=[...f.querySelectorAll('.mq-fi')],W=innerWidth,H=innerHeight,m=24;
+const bb=f.getBoundingClientRect(),cx=bb.left,cy=bb.top,cd=Math.atan2(H/2-cy,W/2-cx)*180/Math.PI;
+const pts=(R,a0,s)=>its.map((_,i)=>{const a=(a0+i*s)*Math.PI/180;return[cx+R*Math.cos(a),cy+R*Math.sin(a)]});
+const pen=P=>P.reduce((t,p)=>t+Math.max(0,m-p[0])+Math.max(0,p[0]-(W-m))+Math.max(0,m-p[1])+Math.max(0,p[1]-(H-m)),0);
+let best=null,bs=1e9;
+const tryC=(R,a0,s,bias)=>{const P=pts(R,a0,s),sc=pen(P)+bias;if(sc<bs-1e-9){bs=sc;best=P}};
+const n=its.length;for(let a=0;a<360/n;a+=15)tryC(78,a,360/n,0);
+for(const[R,s]of[[92,30],[120,22],[150,18],[172,15]])for(let t=0;t<360;t+=15){let d=Math.abs(((t-cd+540)%360)-180);d=180-d;tryC(R,t-(n-1)*s/2,s,.01*d+(R-92)*.05+.001)}
+best.forEach((p,i)=>{const x=Math.min(W-m,Math.max(m,p[0])),y=Math.min(H-m,Math.max(m,p[1]));
+its[i].style.setProperty('--dx',(x-cx)+'px');its[i].style.setProperty('--dy',(y-cy)+'px')})}
+function setMenu(v){fabOpen=v;const f=q1('.mq-fab');if(f){f.classList.toggle('on',v);if(v)layoutMenu()}}
+function fit(){if(!isLS()||scr!=='test')return;const b=q1('.mq-tbd');if(!b)return;let a=1.45;root.style.setProperty('--mqa',a);
+while(b.scrollHeight>b.clientHeight+1&&a>.4){a=Math.round((a-.05)*100)/100;root.style.setProperty('--mqa',a)}}
+function hint(){if(hinted||!isLS()||fsDone||fsEl()||!(document.fullscreenEnabled||document.webkitFullscreenEnabled))return;hinted=true;
+const t=q1('.mq-t');if(!t)return;t.insertAdjacentHTML('beforeend','<div class="mq-fsh">पूरी स्क्रीन के लिए एक बार स्क्रीन को टच करें</div>');
+setTimeout(()=>{const h=q1('.mq-fsh');if(h)h.remove()},4500)}
+function fabHTML(){const l=left[cur],c=l<=5?' crit':l<=10?' warn':'',N=run.length;
+const b=(a,lb,c1,c2,ic,dis)=>`<button class="mq-fi" data-act="${a}" aria-label="${lb}" style="--c1:${c1};--c2:${c2}"${dis?' disabled':''}>${ic}</button>`;
+return ttHTML()+`<div class="mq-tc${c}" id="mqTc" data-k="tc" data-drag="tc">${sc(l)}</div><div class="mq-fab${fabOpen?' on':''}" data-k="fab"><div class="mq-fm">`+
+b('bk','Back','#6f9bff','#2f5fe0',IC.bk,!cur)+
+b('pz',paused?'Resume':'Pause','#ffc15e','#ef8a00',paused?IC.pl:IC.pz)+
+b('nx','Next','#6f9bff','#2f5fe0',IC.nx,cur>=N-1)+b('sum','Test Summary','#ffd166','#e09a00','<span style="font-size:1.1rem;font-weight:700">▦</span>')+
+b('vo',vo?'आवाज़ बंद करें':'आवाज़ चालू करें','#4fd8d0','#0f8f8a',vo?IC.vo:IC.vx)+(vo?b('vs','आवाज़ की स्पीड','#ff9ec4','#d6336c','<span class="mq-sp">'+vlab()+'</span>'):'')+
+b('fm','Font छोटा करें','#b79bff','#6a45e0',IC.fm)+
+b('fp','Font बड़ा करें','#b79bff','#6a45e0',IC.fp)+b('nm','Night mode','#8aa0d8','#2b3f7a',NMI())+
+b('sub','Submit','#4fe08f','#12a24f',IC.sub)+
+`</div><button class="mq-fb" data-drag="fab" aria-label="Controls">${IC.dots}</button></div>`}
+const dm=e=>{if(!drag||e.pointerId!==drag.id)return;
+if(!drag.moved&&Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<8)return;
+drag.moved=true;if(e.cancelable)e.preventDefault();
+const W=innerWidth,H=innerHeight,el=q1('[data-k="'+drag.k+'"]'),mx=Math.max(26,(el?el.offsetWidth/2:0)+4),my=Math.max(26,(el?el.offsetHeight/2:0)+4),x=Math.min(W-mx,Math.max(mx,e.clientX+drag.dx)),y=Math.min(H-my,Math.max(my,e.clientY+drag.dy));
+pos[drag.k]={x:x/W,y:y/H};place(drag.k);if(drag.k==='fab'&&fabOpen)layoutMenu()};
+const du=e=>{if(!drag||e.pointerId!==drag.id)return;const d=drag;drag=null;
+document.removeEventListener('pointermove',dm);document.removeEventListener('pointerup',du);document.removeEventListener('pointercancel',du);
+if(e.type==='pointerup'&&!d.moved){if(d.k==='fab')setMenu(!fabOpen);else if(d.k==='tt'){ttMin=!ttMin;const t=q1('[data-k="tt"]');if(t){t.classList.toggle('min',ttMin);place('tt')}}}};
+const pd=e=>{if(scr!=='test')return;
+if(fabOpen&&!e.target.closest('.mq-fab'))setMenu(false);
+const h=e.target.closest('[data-drag]');if(!h||(e.pointerType==='mouse'&&e.button>0))return;
+const r=h.getBoundingClientRect();
+drag={k:h.dataset.drag,id:e.pointerId,sx:e.clientX,sy:e.clientY,dx:r.left+r.width/2-e.clientX,dy:r.top+r.height/2-e.clientY,moved:false};
+document.addEventListener('pointermove',dm,{passive:false});document.addEventListener('pointerup',du);document.addEventListener('pointercancel',du)};
+const fsTap=()=>{if(isLS()&&!fsDone)tryFS()};
+let rq=0;const onRes=()=>{cancelAnimationFrame(rq);rq=requestAnimationFrame(()=>{if(scr==='test'){place('tt');if(isLS()){place('fab');place('tc');if(fabOpen)layoutMenu();fit()}}else if(scr==='start')fitStart()})};
+const onMM=()=>{if(isLS()){fsDone=false;tryFS()}
+if(scr==='test'){fabOpen=false;const f=q1('.mq-fab');if(f)f.classList.remove('on');place('fab');place('tc');place('tt');fit()}else if(scr==='start')fitStart()};
+
+/* ---------- start (downloaded file only) ---------- */
+function modeHTML(){return `<div class="mq-modes" role="radiogroup" aria-label="Test Mode"><button type="button" class="mq-mo${mode==='exam'?' on':''}" data-act="mode" data-v="exam" role="radio" aria-checked="${mode==='exam'}"><b>📝 Exam Mode</b><small>सामान्य — उत्तर Submit के बाद दिखेंगे</small></button><button type="button" class="mq-mo${mode==='practice'?' on':''}" data-act="mode" data-v="practice" role="radio" aria-checked="${mode==='practice'}"><b>🎯 Practice Mode</b><small>उत्तर चुनते ही सही उत्तर हरा</small></button></div>`}
+function fitStart(){if(!isLS()||scr!=='start')return;const pc=q1('.mq-st .mq-pc'),l=q1('.mq-stl'),r=q1('.mq-str');if(!pc||!l||!r)return;let a=1.3;
+const ov=()=>pc.scrollHeight>pc.clientHeight+1||l.scrollHeight>l.clientHeight+1||r.scrollHeight>r.clientHeight+1;
+pc.style.setProperty('--sa',a);while(ov()&&a>.45){a=Math.round((a-.04)*100)/100;pc.style.setProperty('--sa',a)}}
+function dStart(){stop();scr='start';
+const tm=cfg.tmode||'q',tot=tf(N0*st.secs),qT='<span><b>'+st.secs+'</b> सेकंड / प्रश्न</span>',tT='<span>कुल समय <b>'+tot+'</b></span>',
+meta=[['🎓','कक्षा',cfg.cls],['📘','विषय',cfg.subj],['📖','अध्याय',cfg.chap]].filter(a=>a[2]),
+dins=['हर प्रश्न और विकल्प अपने-आप पढ़कर सुनाए जाएँगे; 🔊 से आवाज़ बंद/चालू और स्पीड बदल सकते हैं।','हर प्रश्न के लिए {secs} सेकंड मिलेंगे; समय समाप्त होते ही अगला प्रश्न अपने-आप खुल जाएगा।','विकल्प पर टैप करके उत्तर चुनें; उसी विकल्प पर दोबारा टैप करने से चयन हट जाएगा।','Back / Next से प्रश्नों के बीच जाएँ, Pause से टाइमर रोकें, A− / A+ से Font बदलें।','Submit से पहले पुष्टि पूछी जाएगी।'],
+il=(cfg.ins&&cfg.ins.length)?cfg.ins:dins;
+root.innerHTML=`<div class="mq-pg mq-st"><div class="mq-pc"><div class="mq-stl">${cfg.school?`<div class="mq-sch">${esc(cfg.school)}</div>`:''}${cfg.hideTitle?'':`<h1 class="mq-h1">${esc(cfg.title)}</h1>`}
+${meta.length?`<div class="mq-meta">${meta.map(a=>`<div><span class="mq-mi">${a[0]}</span><small>${a[1]}</small><b>${esc(a[2])}</b></div>`).join('')}</div>`:''}${cfg.tchr?`<div class="mq-tch"><span>👨‍🏫</span> शिक्षक: <b>${esc(cfg.tchr)}</b></div>`:''}
+<div class="mq-chips"><span><b>${N0}</b> प्रश्न</span>${tm==='t'?tT:tm==='b'?qT+tT:qT}<span>सही <b>+${st.mark}</b>${st.neg?` · गलत <b>−${st.neg}</b>`:''}</span></div></div><div class="mq-str">
+<div class="mq-insc"><h4>📌 निर्देश</h4><ol class="mq-ino">${il.map(t=>`<li>${tok(t)}</li>`).join('')}</ol></div>${modeHTML()}</div><div class="mq-stb">
+<div class="mq-tgs"><label class="mq-sw"><input type="checkbox" data-t="shufQ"${st.shufQ?' checked':''}><i></i><span>Shuffle Questions</span></label><label class="mq-sw"><input type="checkbox" data-t="shufO"${st.shufO?' checked':''}><i></i><span>Shuffle Options</span></label></div>
+<div style="display:flex;gap:6px;margin:0 0 6px"><input data-f="sname" value="${esc(sn)}" placeholder="नाम (वैकल्पिक)" maxlength="40" style="flex:2 1 0;min-width:0;padding:6px 8px;border-radius:8px;border:1.5px solid #b8c3dd;background:#fff;color:#0f1b4d;font:inherit;font-size:.95rem;box-sizing:border-box;width:100%"><input data-f="sroll" value="${esc(sr)}" placeholder="रोल नं." maxlength="12" style="flex:1 1 0;min-width:0;padding:6px 8px;border-radius:8px;border:1.5px solid #b8c3dd;background:#fff;color:#0f1b4d;font:inherit;font-size:.95rem;box-sizing:border-box;width:100%"></div><button class="mq-btn mq-pri mq-xl" data-act="go">TEST START</button><div class="mq-cr">Prepared by- Chunmun Sir</div></div></div></div>`;
+fitStart();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{if(scr==='start')fitStart()})}
+
+/* ---------- run ---------- */
+function begin(){
+run=cfg.items.map(x=>({q:x.q,o:x.o.slice(),a:x.a,s:x.s|0}));
+if(st.shufQ)shuf(run);if(cfg.sx)run.sort((a,b)=>a.s-b.s);
+if(st.shufO)run.forEach(x=>{const p=shuf(x.o.map((_,i)=>i));x.o=p.map(i=>x.o[i]);x.a=p.indexOf(x.a)});
+ans=run.map(()=>-1);seen=run.map(()=>false);left=run.map(()=>st.secs);cur=0;paused=false;modal=false;shown=false;res=null;
+last=Date.now();stop();tid=setInterval(tick,200);if(isLS())tryFS();spk=-1;stopSpeak();dTest()}
+
+function dTest(){scr='test';seen[cur]=true;const x=run[cur],N=run.length,lk=left[cur]<=0,rv=mode==='practice'&&ans[cur]>=0;
+root.innerHTML=`<div class="mq-t${paused?' mq-ps':''}${lk?' mq-lk':''}">
+<header class="mq-th"><div class="mq-tn">${cfg.hideTitle?'':esc(cfg.title)}</div>${VB()}${FZ}<button type="button" class="mq-tsb" data-act="sum" aria-label="Test Summary" title="Test Summary">▦</button><div class="mq-tmr" id="mqTm">${sc(left[cur])}</div></header>
+<div class="mq-bar"><i id="mqBr"></i></div>
+<main class="mq-tbd">${infoHTML()}${secHTML()}<div class="mq-qh"><span class="mq-qno">Question <b>${cur+1}</b> / ${N}</span><span class="mq-lkb">समय समाप्त</span></div>
+<div class="mq-card"><p class="mq-qt"><span class="mq-qn">${cur+1}<span class="mq-qs">/${N}</span></span>${esc(x.q)}</p><div class="mq-ops">${x.o.map((o,i)=>`<button class="mq-op${ans[cur]===i?' on':''}${rv?(i===x.a?' ok':i===ans[cur]?' bad':''):''}" data-act="op" data-i="${i}"><span class="mq-lt">${L[i]}</span><span class="mq-ot">${esc(o)}</span>${rv?(i===x.a?TICK:i===ans[cur]?XM:''):''}</button>`).join('')}</div></div>
+<p class="mq-hint">${mode==='practice'?'Practice Mode: विकल्प चुनते ही सही उत्तर हरा दिखेगा — चुनने के बाद बदल नहीं सकते':'उसी विकल्प पर दोबारा टैप करने से चयन हट जाएगा'}</p>
+<div class="mq-pov"><div><div class="mq-pi">⏸</div><h2>Test Paused</h2><p>टाइमर रुका हुआ है</p><button class="mq-btn mq-pri mq-xl" data-act="pz">▶ Resume</button></div></div></main>
+<footer class="mq-tf"><button class="mq-btn" data-act="bk"${cur?'':' disabled'}>◀ Back</button><button class="mq-btn" data-act="pz">${paused?'▶ Resume':'⏸ Pause'}</button><button class="mq-btn mq-nx" data-act="nx"${cur<N-1?'':' disabled'}>Next ▶</button><button class="mq-btn mq-sb" data-act="sub">Submit ✓</button></footer>${fabHTML()}</div>`;
+tm();sayQ();place('tc');place('fab');place('tt');if(fabOpen)layoutMenu();fit();
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{if(scr==='test')fit()})}
+
+function tm(){const l=left[cur],e=q1('#mqTm'),b=q1('#mqBr');if(!e)return;
+const c=l<=5?'crit':l<=10?'warn':'';e.textContent=sc(l);e.className='mq-tmr '+c;b.className=c;b.style.width=(l/st.secs*100)+'%';
+const tc=q1('#mqTc');if(tc){tc.textContent=sc(l);tc.className='mq-tc'+(c?' '+c:'')}}
+
+function tick(){const n=Date.now(),dt=Math.min(1.5,(n-last)/1000);last=n;
+if(scr!=='test'||paused||modal||left[cur]<=0)return;
+left[cur]=Math.max(0,left[cur]-dt);tm();
+if(left[cur]<=0){if(cur<run.length-1)go(cur+1);else finish(true)}}
+
+function go(n){if(n<0||n>=run.length)return;cur=n;last=Date.now();dTest()}
+let AC=null,streak=0,lastC=-1,lastW=-1;
+function tn(f,t,d,g,ty){const o=AC.createOscillator(),k=AC.createGain();o.type=ty;o.frequency.setValueAtTime(f,t);k.gain.setValueAtTime(.0001,t);k.gain.exponentialRampToValueAtTime(g,t+.03);k.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(k);k.connect(AC.destination);o.start(t);o.stop(t+d+.05)}
+function rp(n,l){let k;do{k=Math.floor(Math.random()*n)}while(n>1&&k===l);return k}
+function fx(ok){streak=ok?streak+1:0;
+ const GE=[['🌟','शाबाश!'],['🎉','बिल्कुल सही!'],['👏','वाह!'],['🏆','बहुत बढ़िया!'],['🚀','ज़बरदस्त!'],['💯','एकदम सही!'],['😊','सही जवाब!'],['⭐','कमाल!']],WE=[['💪','कोई बात नहीं!'],['🙂','अगली बार पक्का!'],['🌱','सीखते रहो!'],['👍','कोशिश अच्छी थी!'],['🤗','सही उत्तर देख लो']];
+ let k=ok?(lastC=rp(GE.length,lastC)):(lastW=rp(WE.length,lastW)),m=(ok?GE:WE)[k];
+ if(ok&&[3,5,7,10].includes(streak))m=['🔥',streak+' लगातार सही!'];
+ if(vo){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();const t=AC.currentTime+.02;
+  if(ok){const P=[[523,659,784,1047],[587,740,880,1175],[659,784,988,1319],[523,784,659,1047]][k%4];P.forEach((f,i)=>tn(f,t+i*.16,.4,.1,i%2?'triangle':'sine'))}
+  else{const P=[[330,392],[349,415],[294,349]][k%3];P.forEach((f,i)=>tn(f,t+i*.24,.45,.06,'sine'))}}catch(e){}}
+ const cd=q1('.mq-card');if(!cd)return;const o=q1('.mq-fx');if(o)o.remove();
+ cd.insertAdjacentHTML('beforeend','<div class="mq-fx '+(ok?'g':'w')+'"><span>'+m[0]+'</span><b>'+m[1]+'</b>'+(ok?['✨','⭐','🎉','✨','🎊'].map((c,i)=>'<em style="--x:'+((i-2)*22)+'px;animation-delay:'+(i*.05)+'s">'+c+'</em>').join(''):'')+'</div>');
+ setTimeout(()=>{const f=q1('.mq-fx');if(f)f.remove()},1500)}
+function sumHTML(){const N=run.length,ex=mode!=='practice';let a=0,n=0,v=0,r=0,w=0;
+ run.forEach((x,i)=>{if(ans[i]>=0){a++;ans[i]===x.a?r++:w++}else if(seen[i])n++;else v++});
+ const cell=i=>{let k='w';if(ans[i]>=0)k=ex||ans[i]===run[i].a?'g':'r';else if(seen[i])k=ex?'r':'y';return '<button type="button" class="mqs-n '+k+(i===cur?' cur':'')+'" data-act="sg" data-v="'+i+'">'+(i+1)+'</button>'};
+ const multi=cfg.sx&&new Set(run.map(x=>x.s|0)).size>1;let grid='';
+ if(multi){let l=-1;run.forEach((x,i)=>{if((x.s|0)!==l){if(l>=0)grid+='</div>';l=x.s|0;grid+='<div class="mqs-gh">'+esc(cfg.sx.n[l]||'Section '+(l+1))+'</div><div class="mqs-gg">'}grid+=cell(i)});grid+='</div>'}
+ else grid='<div class="mqs-gg">'+run.map((x,i)=>cell(i)).join('')+'</div>';
+ const rows=[];if(!cfg.hideTitle&&cfg.title)rows.push(['टेस्ट',cfg.title]);if(sn.trim())rows.push(['विद्यार्थी',sn.trim()]);if(sr.trim())rows.push(['रोल नं.',sr.trim()]);
+ const info=rows.length?'<div class="mqs-info">'+rows.map(x=>'<span><small>'+x[0]+'</small> <b>'+esc(x[1])+'</b></span>').join('')+'</div>':'';
+ const chip=(c,k,b,l)=>'<div class="mqs-c '+c+'"><b>'+b+'</b><small>'+k+'</small><small>'+l+'</small></div>';
+ const lg=ex?[['#1fa655','Answered'],['#e5484d','Not Answered'],['#fff','Not Viewed']]:[['#1fa655','सही'],['#e5484d','गलत'],['#ffd978','देखा, हल नहीं'],['#fff','नहीं देखा']];
+ return '<div class="mqs-ov" data-act="sc"><div class="mqs-bx" data-act="nop"><div class="mqs-hd"><b>📋 टेस्ट सारांश <small>(TEST SUMMARY)</small></b><button type="button" class="mqs-x" data-act="sc" aria-label="बंद करें">✕</button></div>'+info+
+ '<div class="mqs-st">'+chip('t','Total','<span>'+N+'</span>','कुल प्रश्न')+chip('g','Answered',a,'उत्तर दिए')+chip('r','Not Answered',n,'उत्तर नहीं')+chip('w','Not Viewed',v,'नहीं देखा')+'</div>'+
+ (ex?'':'<div class="mqs-pr">✔ सही '+r+' &nbsp;·&nbsp; ✖ गलत '+w+'</div>')+
+ '<div class="mqs-t2">प्रश्न पैनल <small>(Question Panel — '+(ex?'Exam':'Practice')+')</small></div>'+grid+
+ '<div class="mqs-lg">'+lg.map(x=>'<span><i style="background:'+x[0]+'"></i>'+x[1]+'</span>').join('')+'</div></div></div>'}
+function showSum(){const t=q1('.mq-t');if(!t)return;closeSum();t.insertAdjacentHTML('beforeend',sumHTML())}
+function closeSum(){const m=q1('.mqs-ov');if(m)m.remove()}
+function secHTML(){const sx=cfg.sx;if(!sx)return'';const ids=[...new Set(run.map(x=>x.s|0))].sort();if(ids.length<2)return'';return '<div class="mq-sxb">'+ids.map(k=>{const tot=run.filter(x=>x.s===k).length,dn=run.filter((x,i)=>x.s===k&&ans[i]>=0).length;return '<button type="button" class="mq-sxc'+(run[cur].s===k?' on':'')+'" data-act="sx" data-v="'+k+'"><b>'+esc(sx.n[k]||'Section '+(k+1))+'</b><small>'+dn+'/'+tot+'</small></button>'}).join('')+'</div>'}
+function updSx(){const b=q1('.mq-sxb');if(b)b.outerHTML=secHTML()}
+function pick(i){if(modal||paused||left[cur]<=0)return;if(mode==='practice'&&ans[cur]>=0)return;if(ans.every(v=>v<0))streak=0;ans[cur]=ans[cur]===i?-1:i;if(ans[cur]>=0)stopSpeak();updSx();
+root.querySelectorAll('.mq-op').forEach((b,k)=>b.classList.toggle('on',ans[cur]===k));
+if(mode==='practice'&&ans[cur]>=0){const x=run[cur];root.querySelectorAll('.mq-op').forEach((b,k)=>{if(k===x.a){b.classList.add('ok');b.insertAdjacentHTML('beforeend',TICK)}else if(k===ans[cur]){b.classList.add('bad');b.insertAdjacentHTML('beforeend',XM)}});fx(ans[cur]===x.a)}}
+function pause(){paused=!paused;last=Date.now();if(paused)stopSpeak();dTest()}
+function ask(){modal=true;stopSpeak();const N=run.length,at=ans.filter(v=>v>=0).length,un=N-at;
+q1('.mq-t').insertAdjacentHTML('beforeend',`<div class="mq-md" role="dialog" aria-modal="true"><div class="mq-mc"><h3>टेस्ट Submit करें?</h3><p>${un?`अभी ${un} प्रश्न अनुत्तरित हैं। `:''}Submit के बाद उत्तर बदले नहीं जा सकेंगे।</p>
+<div class="mq-mg"><div><b>${N}</b>कुल प्रश्न</div><div><b>${at}</b>हल किए</div><div class="${un?'w':''}"><b>${un}</b>छोड़े</div></div>
+<div class="mq-mb"><button class="mq-btn mq-ol" data-act="mc">वापस जाएँ</button><button class="mq-btn mq-pri" data-act="my">हाँ, Submit</button></div></div></div>`)}
+function closeM(){modal=false;last=Date.now();const m=q1('.mq-md');if(m)m.remove()}
+
+function finish(auto){stop();stopSpeak();modal=false;let c=0,w=0,s=0;
+run.forEach((x,i)=>{if(ans[i]<0)s++;else if(ans[i]===x.a)c++;else w++});
+const sec=left.reduce((t,l)=>t+(st.secs-l),0),score=Math.round((c*st.mark-w*st.neg)*100)/100;
+res={c,w,s,N:run.length,score,total:Math.round(run.length*st.mark*100)/100,sec,auto};saveRes();
+dEnd()}
+
+/* ---------- after submit ---------- */
+const XM='<svg class="mq-tk" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#d23a3a"/><path d="M8 8l8 8M16 8l-8 8" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>';
+function dEnd(){scr='end';stopSpeak();
+root.innerHTML=`<div class="mq-pg mq-eg"><div class="mq-pc mq-end"><div class="mq-endi">🎉</div><h1 class="mq-endt">टेस्ट सम्पन्न हुआ!</h1>
+<p class="mq-sub">${res.auto?'समय समाप्त होने पर आपका टेस्ट अपने-आप Submit हो गया।':'बधाई! आपने अपना टेस्ट सफलतापूर्वक पूरा कर लिया है।'} आपके प्रयास के लिए धन्यवाद — अब अपना परिणाम देखें।</p>
+${cfg.hideTitle?'':`<span class="mq-endn">${esc(cfg.title)}</span>`}
+<div class="mq-endb"><button class="mq-btn mq-b1" data-act="score">📊 Check Your Score</button><button class="mq-btn mq-b2" data-act="key">🔑 Show Answer Key</button><button class="mq-btn mq-b3" data-act="sol">📘 Show Solution</button></div>
+<div class="mq-endb2"><button class="mq-btn mq-ol" data-act="retest">↻ Retest</button><button class="mq-btn mq-ol mq-ex" data-act="exit">⏻ Exit</button></div><div class="mq-endb2"><button class="mq-btn mq-ol" data-act="rl">📊 परिणाम सूची</button><button class="mq-btn mq-ol" data-act="rsh">📤 परिणाम भेजें</button></div></div></div>`;root.scrollTop=0}
+const RK=()=>'mq_res_'+(cfg.title||'t');
+function RL(){try{return JSON.parse(localStorage.getItem(RK())||'[]')}catch(e){return[]}}
+function saveRes(){if(!res)return;try{const l=RL();l.push({n:sn.trim(),r:sr.trim(),sc:res.score,t:res.total,c:res.c,w:res.w,s:res.s,sec:res.sec,d:new Date().toISOString().slice(0,16).replace('T',' ')});localStorage.setItem(RK(),JSON.stringify(l.slice(-500)))}catch(e){}}
+function dRL(){scr='rl';const l=RL(),th='padding:4px 6px;border-bottom:1px solid rgba(0,0,0,.25)',td='padding:4px 6px;border-bottom:1px solid rgba(0,0,0,.1)';
+root.innerHTML=`<div class="mq-pg mq-eg"><div class="mq-pc" style="max-width:640px;width:100%"><h1 class="mq-endt" style="font-size:1.3rem">📊 परिणाम सूची (${l.length})</h1><div style="overflow:auto;max-height:55vh;margin:8px 0"><table style="width:100%;border-collapse:collapse;font-size:.85rem;text-align:left"><tr>${['#','नाम','रोल','अंक','सही','गलत','दिनांक'].map(h=>`<th style="${th}">${h}</th>`).join('')}</tr>${l.map((x,i)=>`<tr>${[i+1,x.n||'-',x.r||'-',x.sc+'/'+x.t,x.c,x.w,x.d].map(v=>`<td style="${td}">${esc(String(v))}</td>`).join('')}</tr>`).join('')}</table></div><div class="mq-endb2"><button class="mq-btn mq-ol" data-act="end">← Back</button><button class="mq-btn mq-ol" data-act="rcsv">⬇ CSV</button></div><div class="mq-endb2" style="grid-template-columns:1fr"><button class="mq-btn mq-ol" data-act="rclr">🗑 सूची मिटाएँ</button></div></div></div>`;root.scrollTop=0}
+function rCSV(){const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"',rows=[['क्रम','नाम','रोल नं.','अंक','कुल अंक','सही','गलत','छोड़े','समय (सेकंड)','दिनांक']].concat(RL().map((x,i)=>[i+1,x.n,x.r,x.sc,x.t,x.c,x.w,x.s,x.sec,x.d])),b=new Blob(['\ufeff'+rows.map(r=>r.map(q).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='Results_'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+function rShare(b){const t=(cfg.title||'Test')+'\nनाम: '+(sn||'-')+'\nरोल नं.: '+(sr||'-')+'\nअंक: '+res.score+' / '+res.total+' (सही '+res.c+', गलत '+res.w+')';if(navigator.share){navigator.share({text:t}).catch(()=>{})}else{try{navigator.clipboard.writeText(t);b.textContent='✔ कॉपी हुआ'}catch(e){}}}
+function exitT(){if(cfg.onExit){destroy();cfg.onExit();return}
+exitFS();stopSpeak();scr='bye';
+root.innerHTML=`<div class="mq-pg mq-eg"><div class="mq-pc mq-end"><div class="mq-endi">👋</div><h1 class="mq-endt">धन्यवाद!</h1><p class="mq-sub">आपका टेस्ट समाप्त हो गया है। अब आप इस पेज को बंद कर सकते हैं।</p><div class="mq-endb2" style="grid-template-columns:1fr"><button class="mq-btn mq-ol" data-act="retest">↻ Retest</button></div></div></div>`;root.scrollTop=0;try{window.close()}catch(e){}}
+function donut(c,w,s,N){const R=42,C=2*Math.PI*R;let off=0;
+const seg=(v,col)=>{const l=N?v/N*C:0,e=l>0?`<circle cx="50" cy="50" r="${R}" fill="none" stroke="${col}" stroke-width="13" stroke-dasharray="${l} ${C-l}" stroke-dashoffset="${-off}"/>`:'';off+=l;return e};
+return `<svg viewBox="0 0 100 100" style="transform:rotate(-90deg)" aria-hidden="true"><circle cx="50" cy="50" r="${R}" fill="none" style="stroke:var(--mtr,#e9eefb)" stroke-width="13"/>${seg(c,'#128a43')}${seg(w,'#d23a3a')}${seg(s,'#b8c3dd')}</svg>`}
+function dScore(){scr='score';const r=res,A=r.c+r.w,pct=r.total>0?Math.max(0,Math.round(r.score/r.total*100)):0,acc=A?Math.round(r.c/A*100):0;
+const bar=(lb,v,col)=>`<div class="mq-br"><span>${lb}</span><span class="tr"><i style="width:${r.N?v/r.N*100:0}%;background:${col}"></i></span><b>${v}</b></div>`;
+const qs=run.map((x,i)=>{const a=ans[i],good=a===x.a;return `<div class="mq-qc"><p class="mq-qq"><b>${i+1}.</b>${esc(x.q)}</p><div class="mq-lops">${x.o.map((o,k)=>`<div class="mq-lo${k===x.a?' ok':k===a?' bad':''}"><span class="mq-ll">${L[k]}</span><span class="mq-lx">${esc(o)}</span>${k===x.a?TICK:k===a?XM:''}</div>`).join('')}</div>
+<div class="mq-ya ${good?'ok':'bad'}"><span>Your Answer: ${a<0?'— (Not attempted)':`<b>${L[a]}</b> · ${esc(x.o[a])}`}</span>${good?TICK:XM}</div></div>`}).join('');
+root.innerHTML=`<div class="mq-lp"><div class="mq-lw"><div class="mq-lh"><button class="mq-ib" data-act="end" aria-label="Back">←</button><div class="mq-lhn">CHECK YOUR SCORE</div></div>
+<div class="mq-sc"><div class="mq-sct"><div class="mq-dn">${donut(r.c,r.w,r.s,r.N)}<div class="mq-dnc"><b>${pct}%</b><small>Score</small></div></div>
+<div class="mq-sr"><div class="mq-sk">Your Score</div><div class="mq-big2"><b>${r.score}</b><span>/ ${r.total}</span></div><div class="mq-sm"><span>🎯 सटीकता ${acc}%</span><span>⏱ ${fmt(r.sec)}</span></div></div></div>
+<div class="mq-bars">${bar('कुल प्रश्न',r.N,'#0a1f4d')}${bar('प्रयास किए',A,'#3d7bff')}${bar('सही उत्तर',r.c,'#128a43')}${bar('गलत उत्तर',r.w,'#d23a3a')}${bar('छोड़े गए',r.s,'#b8c3dd')}</div></div>
+<div class="mq-h3">📋 आपके उत्तर</div>${qs}
+<div class="mq-acts"><button class="mq-btn mq-wh mq-xl" data-act="end">← Back</button></div></div></div>`;root.scrollTop=0}
+function ktb(base,n,P,p){const k=Math.ceil(Math.sqrt(n));let h=`<div class="mq-kw"><table class="mq-kt"><tbody><tr><td class="mq-kh" colspan="${2*k}">Answer Key${P>1?` (${p+1}/${P})`:''}</td></tr>`;
+const R=Math.ceil(n/k);for(let r=0;r<R;r++){h+='<tr>';for(let c=0;c<k;c++){const i=c*R+r;h+=i<n?`<td class="mq-kq">${base+i+1}</td><td class="mq-ka">${L[run[base+i].a]}</td>`:'<td class="mq-kq e"></td><td class="mq-ka e"></td>'}h+='</tr>'}
+return h+'</tbody></table></div>'}
+function dKey(){scr='key';const N=run.length,P=Math.ceil(N/100);let t='';for(let p=0;p<P;p++)t+=ktb(p*100,Math.min(100,N-p*100),P,p);
+root.innerHTML=`<div class="mq-kp">${t}<div class="mq-acts"><button class="mq-btn mq-wh mq-xl" data-act="end">← Back</button></div></div>`;root.scrollTop=0}
+function dSol(){scr='sol';
+root.innerHTML=`<div class="mq-lp"><div class="mq-lw"><div class="mq-lh"><button class="mq-ib" data-act="end" aria-label="Back">←</button><div class="mq-lhn">Solution</div>${FZ}<button class="mq-ib" data-act="prt" aria-label="Print / PDF" title="Print / PDF">🖨</button></div>
+${run.map((x,i)=>`<div class="mq-qc"><p class="mq-qq"><b>${i+1}.</b>${esc(x.q)}</p><div class="mq-lops">${x.o.map((o,k)=>`<div class="mq-lo${k===x.a?' ok':''}"><span class="mq-ll">${L[k]}</span><span class="mq-lx">${esc(o)}</span>${k===x.a?TICK:''}</div>`).join('')}</div></div>`).join('')}
+<div class="mq-acts"><button class="mq-btn mq-wh mq-xl" data-act="end">← Back</button></div></div></div>`;root.scrollTop=0}
+
+function prt(){
+const css="@page{size:A4;margin:12mm}*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}body{margin:0;font-family:'Hind','Noto Sans Devanagari','Nirmala UI',Mangal,Arial,sans-serif;font-size:12.5pt;line-height:1.5;color:#0a1f4d}.h{border-bottom:2.5px solid #0a1f4d;padding-bottom:3mm;margin-bottom:5mm}.h small{display:block;color:#5a6b94;font-size:10pt}.h h1{margin:0;font-size:18pt}.q{break-inside:avoid;page-break-inside:avoid;margin:0 0 4.5mm;padding:3mm 4mm;border:1px solid #cfd8ea;border-radius:2mm}.qt{font-weight:700;margin:0 0 2mm;white-space:pre-line}.o{display:flex;gap:2.5mm;padding:1.2mm 2.5mm;margin:.8mm 0;border:1px solid transparent;border-radius:1.5mm}.o b{flex:none;width:6mm}.o.ok{background:#dcf5e5;border-color:#128a43;color:#0b4d27;font-weight:700}.f{margin-top:6mm;text-align:center;color:#5a6b94;font-size:9pt}";
+const body=run.map((x,i)=>`<div class="q"><p class="qt">${i+1}. ${esc(x.q)}</p>${x.o.map((o,k)=>`<div class="o${k===x.a?' ok':''}"><b>(${L[k]})</b><span>${esc(o)}${k===x.a?' ✔':''}</span></div>`).join('')}</div>`).join('');
+const html=`<!DOCTYPE html><html lang="hi"><head><meta charset="utf-8"><title>${esc(cfg.title)} - Solution</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap"><style>${css}</style></head><body><div class="h">${cfg.school?`<small>${esc(cfg.school)}</small>`:''}<h1>${esc(cfg.title)} — Solution</h1><small>कुल प्रश्न: ${run.length}</small></div>${body}<div class="f">Prepared by- Chunmun Sir</div></body></html>`;
+const go2=d=>{const w=d.defaultView;(d.fonts&&d.fonts.ready?d.fonts.ready:Promise.resolve()).then(()=>setTimeout(()=>{try{w.focus();w.print()}catch(e){}},400))};
+let w=null;try{w=window.open('','_blank')}catch(e){}
+if(w&&w.document){w.document.open();w.document.write(html);w.document.close();go2(w.document);return}
+const f=document.createElement('iframe');f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';document.body.appendChild(f);
+const d=f.contentWindow.document;d.open();d.write(html);d.close();go2(d);setTimeout(()=>f.remove(),180000)}
+
+function home(){if(cfg.onExit){destroy();cfg.onExit()}else dStart()}
+function font(d){fs=Math.min(10,Math.max(-2,fs+d));setF();fit()}
+
+/* ---------- events ---------- */
+root.onclick=e=>{const b=e.target.closest('[data-act]');if(!b||!root.contains(b))return;const a=b.dataset.act;
+if(modal&&a!=='mc'&&a!=='my')return;
+if(paused&&scr==='test'&&a!=='pz'&&a!=='fm'&&a!=='fp')return;
+if(fabOpen&&a!=='fm'&&a!=='fp'&&a!=='vs')setMenu(false);
+switch(a){
+case'go':begin();break;case'op':pick(+b.dataset.i);break;case'bk':go(cur-1);break;case'nx':go(cur+1);break;
+case'pz':pause();break;case'sub':ask();break;case'mc':closeM();break;case'my':finish(false);break;
+case'nm':nmT();break;case'sum':showSum();break;case'sc':closeSum();break;case'nop':break;case'sg':closeSum();go(+b.dataset.v);break;case'sx':{const k=+b.dataset.v;let j=run.findIndex((x,i)=>x.s===k&&ans[i]<0);if(j<0)j=run.findIndex(x=>x.s===k);go(j);break}case'vs':vr=VR[(VR.indexOf(vr)+1)%VR.length];try{localStorage.setItem('mq_vrate',String(vr))}catch(e){}root.querySelectorAll('[data-act=vs]').forEach(x=>{const s=x.querySelector('.mq-sp');(s||x).textContent=vlab()});spk=-1;sayQ();break;case'vo':vo=!vo;try{localStorage.setItem('mq_voice',vo?'1':'0')}catch(e){}if(vo)spk=-1;else stopSpeak();dTest();break;case'fm':font(-1);break;case'fp':font(1);break;
+case'mode':mode=b.dataset.v==='practice'?'practice':'exam';root.querySelectorAll('.mq-mo').forEach(x=>{const on=x.dataset.v===mode;x.classList.toggle('on',on);x.setAttribute('aria-checked',on)});fitStart();break;case'end':dEnd();break;case'retest':if(cfg.onExit)begin();else dStart();break;case'exit':exitT();break;case'score':dScore();break;case'key':dKey();break;case'sol':dSol();break;
+case'prt':prt();break;case'home':home();break;case'rl':dRL();break;case'rcsv':rCSV();break;case'rclr':if(confirm('सारे परिणाम मिटा दें?')){try{localStorage.removeItem(RK())}catch(e){}dRL()}break;case'rsh':rShare(b);break}};
+root.onchange=e=>{const t=e.target;if(t.dataset&&t.dataset.t)st[t.dataset.t]=t.checked};
+const kd=e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key;
+if(scr==='test'){if(modal){if(k==='Escape')closeM();return}
+if(k==='p'||k==='P'){pause();return}if(paused)return;
+const m=/^[1-4]$/.test(k)?+k-1:'abcd'.indexOf(k.toLowerCase());
+if(k.length===1&&m>=0&&m<run[cur].o.length)pick(m);else if(k==='ArrowRight')go(cur+1);else if(k==='ArrowLeft')go(cur-1)}
+};
+document.addEventListener('keydown',kd);
+root.addEventListener('pointerdown',pd);root.addEventListener('click',fsTap,true);window.addEventListener('resize',onRes);
+if(mm.addEventListener)mm.addEventListener('change',onMM);else if(mm.addListener)mm.addListener(onMM);
+function destroy(){stop();document.removeEventListener('keydown',kd);root.removeEventListener('pointerdown',pd);root.removeEventListener('click',fsTap,true);window.removeEventListener('resize',onRes);
+if(mm.removeEventListener)mm.removeEventListener('change',onMM);else if(mm.removeListener)mm.removeListener(onMM);
+document.removeEventListener('pointermove',dm);document.removeEventListener('pointerup',du);document.removeEventListener('pointercancel',du);
+stopSpeak();exitFS();root.onclick=root.onchange=null;root.innerHTML=''}
+setF();
+if(cfg.standalone)dStart();else begin();
+return{destroy}}
+MQ(document.getElementById("mqRoot"),Object.assign({"title":"SENT-UP Exam 2025","hideTitle":false,"school":"+2 Project Girls High School, Surajgarha","cls":"12th","subj":"History","chap":"","tchr":"Chunmun Sir","tmode":"b","mode":"exam","ins":[],"th":"night","lo":"list","sx":null,"items":[{"q":"किसे भारतीय पुरातत्व का पिता कहा जाता है ?","o":["दयाराम साहनी","एस०आर० राव","आर०ई०एम० ह्वीलर","अलेक्जेंडर कनिंघम"],"a":3,"s":0},{"q":"मोहनजोदड़ो किस नदी के तट पर बसा हुआ था ?","o":["सिंधु","रावी","सतलज","चेनाब"],"a":0,"s":0},{"q":"आर०एस० बिष्ट द्वारा धौलावीरा का उत्खनन कब हुआ ?","o":["1960","1970","1980","1990"],"a":3,"s":0},{"q":"भारतीय पुरातत्व सर्वेक्षण की स्थापना कब हुई ?","o":["1800","1850","1861","1870"],"a":2,"s":0},{"q":"हड़प्पा सभ्यता का विस्तार पूर्व में कहाँ तक था ?","o":["मांडा","दैमाबाद","सुतकागेंडोर","आलमगीरपुर"],"a":3,"s":0},{"q":"महाजनपदों का उदय कब हुआ ?","o":["पंद्रहवीं शताब्दी ई०पू०","दसवीं शताब्दी ई०पू०","छठी शताब्दी ई०पू०","इनमें से कोई नहीं"],"a":2,"s":0},{"q":"गणतांत्रिक व्यवस्था किस महाजनपद में थी ?","o":["मगध","काशी","अंग","वज्जि"],"a":3,"s":0},{"q":"बिम्बिसार का संबंध किस वंश से था ?","o":["गुप्त वंश","मौर्य वंश","हर्यक वंश","शुंग वंश"],"a":2,"s":0},{"q":"इंडिका किसने लिखी ?","o":["स्ट्रैबो","प्लिनी","कौटिल्य","मेगास्थनीज"],"a":3,"s":0},{"q":"मौर्यकालीन गुहा अभिलेख कहाँ मिले हैं ?","o":["कश्मीर","पंजाब","बिहार","उत्तर प्रदेश"],"a":2,"s":0},{"q":"कलिंग युद्ध की भीषणता का उल्लेख अशोक ने किस अभिलेख में किया है ?","o":["Vवें शिलालेख","VIIवें शिलालेख","XIIIवें शिलालेख","XIVवें शिलालेख"],"a":2,"s":0},{"q":"अशोक का राज्याभिषेक कहाँ हुआ ?","o":["राजगृह","वैशाली","पाटलिपुत्र","इनमें से कोई नहीं"],"a":2,"s":0},{"q":"अपने स्वयं के खर्चे से सुदर्शन झील की मरम्मत किसने कराई थी ?","o":["कनिष्क","रुद्रदमन","स्कंदगुप्त","अशोक"],"a":1,"s":0},{"q":"अष्टाध्यायी किसने लिखी ?","o":["पतंजलि","कालिदास","कौटिल्य","पाणिनि"],"a":3,"s":0},{"q":"दक्कन में मौर्य साम्राज्य के अवशेषों पर किसका उदय हुआ ?","o":["चालुक्य","काकतीय","सातवाहन","चोल"],"a":2,"s":0},{"q":"संगम साहित्य की रचना किस भाषा में हुई ?","o":["कन्नड़","तेलुगु","तमिल","मलयालम"],"a":2,"s":0},{"q":"'कौमुदी महोत्सव' नामक नाटक की रचना किसने की ?","o":["शूद्रक","कालिदास","विज्जका","भवभूति"],"a":2,"s":0},{"q":"किस शासक का काल गुप्त काल का चरमोत्कर्ष था ?","o":["स्कंदगुप्त","चंद्रगुप्त द्वितीय","समुद्रगुप्त","चंद्रगुप्त प्रथम"],"a":1,"s":0},{"q":"महरौली का लौह स्तंभ किस काल का है ?","o":["हर्ष काल","कुषाण काल","गुप्त काल","मौर्य काल"],"a":2,"s":0},{"q":"अग्रहार अनुदान किसे दिया जाता था ?","o":["दरबारी कवि","सैनिक","ब्राह्मण","इनमें से कोई नहीं"],"a":2,"s":0},{"q":"ऋग्वेद का रचना काल क्या था ?","o":["3000 - 2500 ई०पू०","2500 - 2000 ई०पू०","2000 - 1500 ई०पू०","1500 - 1000 ई०पू०"],"a":3,"s":0},{"q":"आजीवक संप्रदाय के संस्थापक कौन थे ?","o":["अजित केशकम्बली","मक्खलि गोशाल","पूरण कश्यप","इनमें से कोई नहीं"],"a":1,"s":0},{"q":"महावीर ने अपना पहला उपदेश कहाँ दिया ?","o":["सारनाथ","गया","वैशाली","राजगृह"],"a":3,"s":0},{"q":"बौद्ध संघ के नियमों का उल्लेख किस ग्रंथ में है ?","o":["विनयपिटक","सुत्तपिटक","अभिधम्मपिटक","इनमें से कोई नहीं"],"a":0,"s":0},{"q":"मंदिर निर्माण की उत्तर भारतीय शैली कौन थी ?","o":["बेसर शैली","नागर शैली","द्रविड़ शैली","इनमें से कोई नहीं"],"a":1,"s":0},{"q":"अल-बिरूनी भारत कब आया ?","o":["10वीं शताब्दी","11वीं शताब्दी","12वीं शताब्दी","13वीं शताब्दी"],"a":1,"s":0},{"q":"इब्न बतूता का संबंध कहाँ से है ?","o":["अफगानिस्तान","ईरान","सीरिया","मोरक्को"],"a":3,"s":0},{"q":"नारियल तथा पान पत्ता का वर्णन किस यात्री ने किया है ?","o":["अल-बिरूनी","इब्न बतूता","मार्को पोलो","डोमिंगो पेस"],"a":1,"s":0},{"q":"'ट्रैवल्स इन द मुगल एम्पायर' किसकी रचना है ?","o":["मनुची","राल्फ फिच","सर थामस रो","फ्रांसिस बर्नियर"],"a":3,"s":0},{"q":"फ्रांसिस बर्नियर भारत में कितने वर्षों तक रहा ?","o":["5","7","10","12"],"a":3,"s":0},{"q":"अलवार और नयनार संतों का संबंध किस क्षेत्र से है ?","o":["पूर्वी भारत","पश्चिमी भारत","उत्तर भारत","दक्षिण भारत"],"a":3,"s":0},{"q":"कश्फ-उल-महजुब ग्रंथ के लेखक कौन हैं ?","o":["अबुल फ़ज़्ल","बदायूँनी","जियाउद्दीन बरनी","अबुल हसन अल हजविरी"],"a":3,"s":0},{"q":"विठ्ठल मंदिर कहाँ स्थित है ?","o":["मदुरई","हंपी","बेलुर","वारंगल"],"a":1,"s":0},{"q":"अमर-नायक कौन थे ?","o":["सैनिक कमांडर","कर संग्राहक","लेखापाल","न्यायाधीश"],"a":0,"s":0},{"q":"कौन महिला संत अपने आपको विष्णु की पत्नी मानती थी ?","o":["मीराबाई","अंडाल","लाल देद","जनाबाई"],"a":1,"s":0},{"q":"अलवार संतों के मुख्य काव्य संकलन का नाम क्या है ?","o":["मुकुंदमाला","तिरुवायमोली","नलयिरादिव्य प्रबंधम","इनमें से कोई नहीं"],"a":2,"s":0},{"q":"सम्राट कृष्णदेवराय द्वारा बनवाए गए जलाशय का आँखों देखा वर्णन किस विदेशी यात्री ने किया है ?","o":["मार्को पोलो","बारबोसा","इब्न बतूता","डोमिंगो पेस"],"a":3,"s":0},{"q":"विजयनगर की खोज और इसकी पहचान हम्पी के साथ करने का श्रेय किसे प्राप्त है ?","o":["कॉलिन मैकेंजी","जॉन मार्शल","अलेक्जेण्डर कनिंघम","एस०आर० राव"],"a":0,"s":0},{"q":"शेख अहमद सरहिंदी द्वारा लिखे गए पत्रों का संग्रह कौन है ?","o":["कश्फ-उल-महजुब","फवाइद-अल-फुआद","मकतुबात-ए-इमाम रब्बानी","सियार-उल-औलिया"],"a":2,"s":0},{"q":"नक्शबंदी सिलसिला के संस्थापक कौन थे ?","o":["शेख अहमद सरहिंदी","ख्वाजा मोहम्मद बकी बिल्लाह","हमीदुद्दीन नागोरी","बहाउद्दीन जकारिया"],"a":1,"s":0},{"q":"तालिकोटा का युद्ध कब हुआ ?","o":["1500","1550","1565","1575"],"a":2,"s":0},{"q":"अलवार साहित्य की रचना किस भाषा में की गई ?","o":["तेलुगु","तमिल","कन्नड़","मलयालम"],"a":1,"s":0},{"q":"चिश्ती सिलसिला के संस्थापक कौन थे ?","o":["बाबा फरीद","निज़ामुद्दीन औलिया","ख्वाजा मुइनुद्दीन चिश्ती","शेख अहमद सरहिंदी"],"a":2,"s":0},{"q":"आईन-ए-अकबरी की रचना किस भाषा में हुई ?","o":["फारसी","तुर्की","अरबी","उर्दू"],"a":0,"s":0},{"q":"मुग़ल काल में किस विदेशी यात्री ने भ्रमण किया ?","o":["राल्फ फिच","विलियम हॉकिंस","पीटर मुंडी","इनमें से सभी"],"a":3,"s":0},{"q":"किस मुग़ल शासक ने रेहट की बनावट और इससे सिंचाई का वर्णन किया है ?","o":["बाबर","अकबर","जहाँगीर","औरंगज़ेब"],"a":0,"s":0},{"q":"मुग़ल प्रशासन में राजस्व विभाग का प्रधान कौन था ?","o":["दीवान","मीर बख्शी","मुहतासिब","क़ाज़ी"],"a":0,"s":0},{"q":"विद्वान एवं धार्मिक व्यक्तियों को दिया जानेवाला दान कहलाता था","o":["खालसा","जागीर","मदद-ए-माश","सुयुरग़ल"],"a":2,"s":0},{"q":"ख़ानवा का युद्ध किसके बीच लड़ा गया था ?","o":["बाबर और इब्राहिम लोदी","बाबर और जय सिंह","बाबर और राणा सांगा","बाबर और मेदिनी राय"],"a":2,"s":0},{"q":"हुमायूँनामा का लेखक कौन था ?","o":["हुमायूँ","गुलबदन बेगम","रौशन आरा","अकबर"],"a":1,"s":0},{"q":"पानीपत की प्रथम लड़ाई के द्वारा भारत में किसके शासन की शुरुआत हुई ?","o":["मुग़ल","अफगान","तुर्क","राजपूत"],"a":0,"s":0},{"q":"1540 में कन्नौज का युद्ध किसके बीच लड़ा गया ?","o":["बाबर और शेरशाह","हुमायूँ और शेरशाह","हुमायूँ और महमूद लोदी","हुमायूँ और बहादुर शाह"],"a":1,"s":0},{"q":"ग्रैंड ट्रंक रोड का निर्माण किसने करवाया ?","o":["बाबर","अकबर","शाहजहाँ","शेरशाह"],"a":3,"s":0},{"q":"1556 से 1560 तक अकबर का संरक्षक कौन था ?","o":["हेमू","तर्दी बेग","माहम अंगा","बैरम खाँ"],"a":3,"s":0},{"q":"जिन मनसबदारों को नक़द भुगतान किया जाता था उन्हें कहा जाता था","o":["जागीरदार","मिर्जा","नक़दी","अमीर"],"a":2,"s":0},{"q":"अकबर ने दहसाला प्रणाली किसकी सहायता से शुरू की ?","o":["बीरबल","मानसिंह","टोडरमल","भगवान दास"],"a":2,"s":0},{"q":"निम्नलिखित राजकुमारों में से कौन कला का महान संरक्षक था ?","o":["दारा शिकोह","दानियाल","खुसरो","मुराद"],"a":0,"s":0},{"q":"निम्न में से कौन व्यापारी सबसे पहले मुग़ल काल में भारत आए ?","o":["पुर्तगाली","डच","फ्रांसीसी","ब्रिटिश"],"a":0,"s":0},{"q":"प्लासी का युद्ध कब हुआ ?","o":["1600","1650","1700","1757"],"a":3,"s":0},{"q":"किस प्रदेश में सबसे पहले औपनिवेशिक शासन की स्थापना हुई ?","o":["उत्तर प्रदेश","बंगाल","पंजाब","बम्बई"],"a":1,"s":0},{"q":"पिट्स इंडिया ऐक्ट कब पारित हुआ ?","o":["1700","1750","1773","1784"],"a":3,"s":0},{"q":"स्थायी बंदोबस्त कहाँ लागू हुआ ?","o":["पंजाब","दक्कन","बम्बई","बंगाल"],"a":3,"s":0},{"q":"दक्कन दंगा आयोग की रिपोर्ट ब्रिटिश संसद में कब रखी गई ?","o":["1870","1875","1878","1890"],"a":2,"s":0},{"q":"भारत में अंग्रेजों के विरुद्ध पहला संगठित और व्यापक विद्रोह कब हुआ ?","o":["1757","1764","1857","1919"],"a":2,"s":0},{"q":"किस भारतीय राज्य ने ब्रिटिश ईस्ट इंडिया कंपनी के साथ सहायक संधि पर हस्ताक्षर किए ?","o":["हैदराबाद","मैसूर","अवध","इनमें से सभी"],"a":3,"s":0},{"q":"'गोदनिषेध नीति' की शुरुआत किसने की ?","o":["वारेन हेस्टिंग्स","लार्ड वैवेल","लार्ड वेलेस्ली","लार्ड डलहौजी"],"a":3,"s":0},{"q":"वहाबी आंदोलन का नेता कौन था ?","o":["सर सैयद अहमद खान","अश्फाकुल्ला खान","सैयद अहमद बरेलवी","खान अब्दुल गफ्फार खान"],"a":2,"s":0},{"q":"29 मार्च, 1857 को किस सैनिक छावनी में विद्रोह हुआ ?","o":["आगरा","दानापुर","बैरकपुर","मेरठ"],"a":2,"s":0},{"q":"बिहार में 1857 का विद्रोह का नेतृत्व किसने किया ?","o":["मंगल पांडेय","तांत्या टोपे","बिरजिस क़द्र","बाबु कुँवर सिंह"],"a":3,"s":0},{"q":"ईस्ट इंडिया कंपनी का शासन भारत में कब समाप्त हुआ ?","o":["1857","1858","1884","1919"],"a":1,"s":0},{"q":"सर्वे ऑफ इंडिया की स्थापना किस वर्ष हुई ?","o":["1767","1857","1778","1878"],"a":0,"s":0},{"q":"फोर्ट विलियम किस नगर में बनाया गया ?","o":["दिल्ली","कलकत्ता","मद्रास","आगरा"],"a":1,"s":0},{"q":"गाँधीजी का जन्म कहाँ हुआ ?","o":["अहमदाबाद","सूरत","पोरबंदर","भुज"],"a":2,"s":0},{"q":"रॉलेट ऐक्ट के खिलाफ राष्ट्रव्यापी आंदोलन का नेतृत्व किसने किया ?","o":["सुभाष चंद्र बोस","भगत सिंह","महात्मा गाँधी","जवाहरलाल नेहरू"],"a":2,"s":0},{"q":"मार्ले-मिंटो सुधार अधिनियम कब पारित हुआ ?","o":["1891","1900","1909","1919"],"a":2,"s":0},{"q":"खेड़ा सत्याग्रह गाँधीजी ने किसके समर्थन में शुरू किया था ?","o":["किसान","मिल मजदूर","व्यवसायी","इनमें से सभी"],"a":0,"s":0},{"q":"'द स्टोरी ऑफ माई एक्सपेरिमेंट्स विद टूथ' किसकी रचना है ?","o":["जवाहरलाल नेहरू","डॉ० राजेन्द्र प्रसाद","जे०बी० कृपलानी","महात्मा गाँधी"],"a":3,"s":0},{"q":"बंगाल विभाजन कब हुआ ?","o":["1885","1890","1900","1905"],"a":3,"s":0},{"q":"निम्न में से चरमपंथी नेता कौन थे ?","o":["लाला लाजपत राय","बाल गंगाधर तिलक","बिपिनचंद्र पाल","इनमें से सभी"],"a":3,"s":0},{"q":"1916 में काँग्रेस का वार्षिक अधिवेशन कहाँ हुआ ?","o":["कलकत्ता","दिल्ली","लखनऊ","गया"],"a":2,"s":0},{"q":"असहयोग आंदोलन किस वर्ष शुरू हुआ ?","o":["1919","1920","1921","1922"],"a":1,"s":0},{"q":"चौरी-चौरा का संबंध किस राज्य से है ?","o":["बिहार","उत्तर प्रदेश","मध्य प्रदेश","पंजाब"],"a":1,"s":0},{"q":"साइमन आयोग भारत कब आया ?","o":["1919","1921","1927","1928"],"a":3,"s":0},{"q":"1929 में काँग्रेस का अधिवेशन कहाँ हुआ ?","o":["गया","लखनऊ","लाहौर","बम्बई"],"a":2,"s":0},{"q":"दांडी यात्रा शुरू होने के समय भारत का वायसराय कौन था ?","o":["लार्ड कर्जन","लार्ड इरविन","लार्ड वैवेल","लार्ड चेम्सफोर्ड"],"a":1,"s":0},{"q":"भारत छोड़ो प्रस्ताव पारित होने के समय भारतीय राष्ट्रीय काँग्रेस के अध्यक्ष कौन थे ?","o":["डॉ० राजेन्द्र प्रसाद","श्रीमती एनी बेसेंट","महात्मा गाँधी","मौलाना अबुल कलाम आज़ाद"],"a":3,"s":0},{"q":"'आजाद दस्ता' का गठन किसने किया ?","o":["महात्मा गाँधी","डॉ० राजेन्द्र प्रसाद","मौलाना मजहरुल हक","जयप्रकाश नारायण"],"a":3,"s":0},{"q":"निम्नलिखित में से कौन महात्मा गाँधी द्वारा शुरू किया गया पहला जन आंदोलन था ?","o":["असहयोग आंदोलन","सविनय अवज्ञा आंदोलन","भारत छोड़ो आंदोलन","इनमें से कोई नहीं"],"a":0,"s":0},{"q":"निम्नलिखित में से किसे 'सीमांत गाँधी' के नाम से जाना जाता है ?","o":["मोहम्मद इकबाल","मोहम्मद अली","खान अब्दुल गफ्फार खान","मौलाना अबुल कलाम आज़ाद"],"a":2,"s":0},{"q":"1932 में सांप्रदायिक पंचाट की घोषणा किसने की ?","o":["लार्ड रिपन","लार्ड इरविन","लार्ड वैवेल","रैमसे मैकडोनाल्ड (ब्रिटिश PM)"],"a":3,"s":0},{"q":"बंगाल के विभाजन की घोषणा किस वर्ष हुई ?","o":["1905","1906","1911","1914"],"a":0,"s":0},{"q":"मुंडा विद्रोह का नेता कौन था ?","o":["बिरसा मुण्डा","कान्हू","सिद्धू","गोमधर"],"a":0,"s":0},{"q":"ईस्ट इंडिया कम्पनी को बंगाल की दीवानी किसने प्रदान की ?","o":["सिराजुद्दौला","शुजाउद्दौला","शाह आलम द्वितीय","मीर कासिम"],"a":2,"s":0},{"q":"स्वराज दल के प्रथम अध्यक्ष कौन थे ?","o":["मोतीलाल नेहरू","चित्तरंजन दास","जवाहरलाल नेहरू","फिरोज शाह मेहता"],"a":1,"s":0},{"q":"1939 के त्रिपुरी काँग्रेस अधिवेशन का अध्यक्ष किसे चुना गया ?","o":["डॉ० राजेन्द्र प्रसाद","सुभाष चंद्र बोस","जवाहरलाल नेहरू","श्रीमती एनी बेसेंट"],"a":1,"s":0},{"q":"संविधान सभा के अध्यक्ष कौन थे ?","o":["मौलाना अबुल कलाम आजाद","जवाहरलाल नेहरू","डॉ० राजेन्द्र प्रसाद","वल्लभभाई पटेल"],"a":2,"s":0},{"q":"'दिल्ली चलो' का नारा किसने दिया ?","o":["राम प्रसाद बिस्मिल","भगत सिंह","सुभाष चंद्र बोस","रास बिहारी बोस"],"a":2,"s":0},{"q":"संविधान सभा में कुल कितने सदस्य थे ?","o":["150","200","250","389"],"a":3,"s":0}],"st":{"secs":30,"mark":1,"neg":0,"shufQ":false,"shufO":false}},{standalone:true}));</script></body></html>
